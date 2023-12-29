@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "577469978121",
+    "project_id": "video-audio-library",
+    "storage_bucket": "video-audio-library.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577469978121:android:cee5a550631a3eb45b0ad8",
+        "android_client_info": {
+          "package_name": "com.example.video_audio_library"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOdWdXs6IAS3ZvQssdSRadlib1XI0u2lU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -137,10 +137,10 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(videosList[index].title),
-                      // SizedBox(
-                      //   height: 20,
-                      // ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(videosList[index].title),
+                      ),
                     ]),
               );
             }),

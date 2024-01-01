@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/device_constraints.dart';
 import '/constants/other_const.dart';
+import 'categories_detail.dart';
 
 class CategoriesWidget extends StatelessWidget {
   const CategoriesWidget({super.key});
@@ -15,6 +16,7 @@ class CategoriesWidget extends StatelessWidget {
       height: DeviceConstraints.mainBodyHeight,
       width: double.infinity,
       child: GridView.builder(
+          primary: true,
           padding: EdgeInsets.only(bottom: 80.0),
           itemCount: categories.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -28,40 +30,52 @@ class CategoriesWidget extends StatelessWidget {
             childAspectRatio: deviceWidth > 600 ? 0.9 : 3 / 4,
           ),
           itemBuilder: (context, index) {
-            return Container(
-              padding: EdgeInsets.only(bottom: 16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.0),
-                color: Colors.grey.shade200,
-              ),
-              // padding: EdgeInsets.all(8.0),
-              child: InkWell(
-                onTap: () {},
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: Image.network(
-                        categories[index].imageUrl,
-                        fit: BoxFit.fill,
+            return InkWell(
+              onTap: () {},
+              child: Container(
+                padding: EdgeInsets.only(bottom: 16.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  color: Colors.grey.shade200,
+                ),
+                // padding: EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return CategoriesDetail(
+                        playListImgUrl: categories[index].imageUrl,
+                        playListName: categories[index].nameInEnglish,
+                        playListNameInArabic: categories[index].nameInArabic,
+                      );
+                    }));
+                  },
+                  child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.0),
+                        child: Image.network(
+                          categories[index].imageUrl,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
-                  ),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  Spacer(),
-                  Text(
-                    categories[index].nameInEnglish,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  Text(
-                    categories[index].nameInArabic,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  )
-                ]),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    Spacer(),
+                    Text(
+                      categories[index].nameInEnglish,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      categories[index].nameInArabic,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    )
+                  ]),
+                ),
               ),
             );
           }),

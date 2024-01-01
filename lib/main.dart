@@ -20,14 +20,25 @@ class MyApp extends StatelessWidget {
           // fontFamily:GoogleFonts.openSansCondensed().fontFamily,
           textTheme: GoogleFonts.openSansCondensedTextTheme(
               ThemeData.light().textTheme.copyWith(
-                  bodyLarge: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  bodyMedium: TextStyle(fontWeight: FontWeight.w600))),
+                    bodyLarge: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    bodyMedium: const TextStyle(fontWeight: FontWeight.w600),
+                    bodySmall: const TextStyle(fontWeight: FontWeight.w600),
+
+                    //for search field in appbar
+                    titleMedium: const TextStyle(fontWeight: FontWeight.w600),
+
+                    //for bottom nav
+                    labelSmall: const TextStyle(fontWeight: FontWeight.w600),
+                  )),
           useMaterial3: false,
           scaffoldBackgroundColor: Colors.white),
-      home: HomePage(),
+      home: SingleChildScrollView(
+          child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: const HomePage())),
     );
   }
 }

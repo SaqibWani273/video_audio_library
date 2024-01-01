@@ -20,7 +20,11 @@ class CategoriesWidget extends StatelessWidget {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             mainAxisSpacing: 16.0,
             crossAxisSpacing: 16.0,
-            crossAxisCount: deviceWidth > 900 ? 3 : 2,
+            crossAxisCount: deviceWidth > 1150
+                ? 4
+                : deviceWidth > 900
+                    ? 3
+                    : 2,
             childAspectRatio: deviceWidth > 600 ? 0.9 : 3 / 4,
           ),
           itemBuilder: (context, index) {

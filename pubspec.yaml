@@ -12,9 +12,13 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.24.2
+  #flick_video_player: ^0.5.0   # used for general video player
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
+ # visibility_detector: ^0.4.0+2
+  #youtube_player_flutter: ^8.1.2 # more customizable yt video player but unstable
+  youtube_player_iframe: ^4.0.4
 
 dev_dependencies:
 

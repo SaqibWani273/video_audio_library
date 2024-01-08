@@ -45,55 +45,72 @@ class CategoriesDetail extends StatelessWidget {
                         children: [
                           Expanded(
                             flex: 1,
-                            child: Stack(children: [
-                              //image
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  child: Image.network(
-                                    playList.imageUrl ?? playListImgUrl,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                left: 0,
-                                // height: 80,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(16.0),
-                                        bottomRight: Radius.circular(16.0)),
-                                    color: Colors.grey.withOpacity(0.6),
-                                  ),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Text(
-                                          "${playList.videos.length} videos",
-                                        ),
-                                        const Icon(Icons.playlist_play_rounded)
-                                      ]),
-                                ),
-                              ),
-                              Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    margin: const EdgeInsets.only(top: 32.0),
-                                    child: Text(
-                                      playList.nameInArabic,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: Colors.white),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Scaffold(
+                                      body: AllVideosWidget(
+                                        videosList: playList.videos,
+                                        height:
+                                            MediaQuery.of(context).size.height,
+                                      ),
                                     ),
-                                  )),
-                            ]),
+                                  ),
+                                );
+                              },
+                              child: Stack(children: [
+                                //image
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    child: Image.network(
+                                      playList.imageUrl ?? playListImgUrl,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  left: 0,
+                                  // height: 80,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(16.0),
+                                          bottomRight: Radius.circular(16.0)),
+                                      color: Colors.grey.withOpacity(0.6),
+                                    ),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            "${playList.videos.length} videos",
+                                          ),
+                                          const Icon(
+                                              Icons.playlist_play_rounded)
+                                        ]),
+                                  ),
+                                ),
+                                Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 32.0),
+                                      child: Text(
+                                        playList.nameInArabic,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(color: Colors.white),
+                                      ),
+                                    )),
+                              ]),
+                            ),
                           ),
                           Expanded(
                               flex: deviceWidth > 1100

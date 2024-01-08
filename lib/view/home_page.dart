@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_audio_library/constants/other_const.dart';
 import '/constants/device_constraints.dart';
 import '/view/audio_homepage.dart';
 import 'widgets/all_videos_widget.dart';
@@ -97,9 +98,9 @@ class _HomePageState extends State<HomePage> {
 }
 
 final List<Widget> mainBodyWidgets = <Widget>[
-  AllVideosWidget(),
+  AllVideosWidget(videosList: videosList),
   CategoriesWidget(),
-  AllVideosWidget(),
+  AllVideosWidget(videosList: videosList),
 ];
 
 class NavBar {

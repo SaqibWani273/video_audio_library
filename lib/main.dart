@@ -1,11 +1,23 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_audio_library/view/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+Future<void> main() async {
+  log(
+    "App started",
+  );
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
+    statusBarColor: Colors.white,
+    statusBarIconBrightness: Brightness.dark,
+  ));
+
   runApp(const MyApp());
 }
 

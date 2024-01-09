@@ -17,9 +17,13 @@ class VideoPlayerScreen extends StatefulWidget {
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late YoutubePlayerController _controller;
 
+  late String _videoId;
+  bool isLoaded = false;
+
   @override
   void initState() {
     super.initState();
+
     _controller = YoutubePlayerController(
         params: const YoutubePlayerParams(
       showControls: true,
@@ -28,144 +32,100 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       loop: false,
       enableCaption: true,
     ));
-    _controller.setFullScreenListener((bool value) {
-      log(
-        'FullScreen: ${value ? 'Entered' : 'Exited'}',
-      );
-    });
-    final _videoId =
-        YoutubePlayerController.convertUrlToId(widget.videoData.videoUrl);
-    _controller.loadVideoById(videoId: _videoId ?? "");
-  }
 
-  // @override
-  // void dispose() {
-  //   _controller.close();
-  //   super.dispose();
-  // }
+    _controller.setFullScreenListener((bool value) {
+      // log(
+      //   'FullScreen: ${value ? 'Entered' : 'Exited'}',
+      // );
+    });
+    _controller.listen((event) {
+      if (event.playerState == PlayerState.playing && isLoaded == false) {
+        //to stop showing loading indicator when video started playing
+        setState(() {
+          isLoaded = true;
+        });
+      }
+    });
+    _videoId =
+        YoutubePlayerController.convertUrlToId(widget.videoData.videoUrl) ?? "";
+    _controller.loadVideoById(videoId: _videoId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    // final deviceWidth = MediaQuery.of(context).size.width;
+    // log("build->isLoaded = $isLoaded, ");
     return YoutubePlayerScaffold(
-      builder: (context, player) {
-        return
-            //  deviceWidth > 800
-            //     ? DesktopView(player: player, title: widget.videoData.title)
-            //     : MobileView(player: player);
-
-            Scaffold(
+      key: ValueKey(
+          isLoaded), //setstate will not rebuild this widget without using key
+      backgroundColor: Colors.green,
+      controller: _controller!,
+      autoFullScreen: false,
+      builder: (_, player) {
+        // log("entered here");
+        return Scaffold(
           body: LayoutBuilder(builder: (context, constraints) {
             if (kIsWeb && constraints.maxWidth > 800) {
-              return DesktopView(player: player, title: widget.videoData.title);
+              //Desktop view
+              return Row(
+                children: [
+                  Expanded(
+                      flex: 3,
+                      child: Column(children: [
+                        Stack(
+                            children: [player, if (!isLoaded) LoadingWidget()]),
+                        SizedBox(height: 10),
+                        Suggestions(),
+                        Text(widget.videoData.title),
+                      ])),
+                  Expanded(
+                    flex: 2,
+                    //to do: show suggested videos based on the selected suggestion
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: AllVideosWidget(videosList: videosList),
+                    ),
+                  )
+                ],
+              );
             }
-            return MobileView(player: player);
+            //Mobile view
+            // log("isLoaded = $isLoaded, !isLoaded = ${!isLoaded}");
+            return Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+              child: Column(children: [
+                Expanded(
+                  flex: 3,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      // height: 200,
+                      child: Stack(
+                          children: [player, if (!isLoaded) LoadingWidget()]),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    flex: 6,
+                    child: Column(children: [
+                      Expanded(
+                        //suggestions
+                        flex: 1,
+                        child: Suggestions(),
+                      ),
+                      //to do: filter list dynamically
+                      Expanded(
+                          flex: 7,
+                          child: AllVideosWidget(
+                            videosList: videosList,
+                          ))
+                    ]))
+              ]),
+            );
           }),
         );
       },
-      controller: _controller,
     );
-  }
-}
-
-class DesktopView extends StatelessWidget {
-  final Widget player;
-  final String title;
-  const DesktopView({super.key, required this.player, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            flex: 3,
-            child: Column(children: [
-              player,
-              SizedBox(height: 10),
-              Suggestions(),
-              Text(title),
-            ])),
-        Expanded(
-          flex: 2,
-          //to do: show suggested videos based on the selected suggestion
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: AllVideosWidget(videosList: videosList),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class MobileView extends StatelessWidget {
-  final Widget player;
-  const MobileView({super.key, required this.player});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: Column(children: [
-        Expanded(
-          flex: 3,
-          child: FittedBox(
-            fit: BoxFit.fill,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: player,
-            ),
-          ),
-        ),
-        Expanded(
-            flex: 6,
-            child: Column(children: [
-              Expanded(
-                //suggestions
-                flex: 1,
-                child: Suggestions(),
-              ),
-              //to do: filter list dynamically
-              Expanded(
-                  flex: 7,
-                  child: AllVideosWidget(
-                    videosList: videosList,
-                  ))
-            ]))
-      ]),
-    );
-    //  Padding(
-    //   padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-    //   child: Column(children: [
-    //     Expanded(
-    //       flex: 3,
-    //       child: FittedBox(
-    //         fit: BoxFit.fill,
-    //         child: Container(
-    //           //to do: change dynamically
-    //           height: 200,
-    //           width: MediaQuery.of(context).size.width,
-    //           child: player,
-    //         ),
-    //       ),
-    //     ),
-    //     Expanded(
-    //         flex: 6,
-    //         child: Column(children: [
-    //           Expanded(
-    //             //suggestions
-    //             flex: 1,
-    //             child: Suggestions(),
-    //           ),
-    //           //to do: filter list dynamically
-    //           Expanded(
-    //               flex: 7,
-    //               child: AllVideosWidget(
-    //                 videosList: videosList,
-    //               ))
-    //         ]))
-    //   ]),
-    // );
   }
 }
 
@@ -186,6 +146,31 @@ enum SuggestionsEnum {
   quranRecitation1,
   tafseerRecitation1,
   quranTafseerRecitation1,
+}
+
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      child: Container(
+        color: Colors.black,
+        child: Center(
+            child: CircularProgressIndicator.adaptive(
+          backgroundColor: Colors.white,
+          // valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          strokeWidth: 3.0,
+
+          strokeCap: StrokeCap.square,
+        )),
+      ),
+    );
+  }
 }
 
 class Suggestions extends StatelessWidget {

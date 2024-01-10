@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:video_audio_library/view/home_page.dart';
 import '../../constants/device_constraints.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -17,10 +18,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/images/youtube_logo.png',
-            height: 40,
-            width: 80,
+          InkWell(
+            onTap: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return const HomePage();
+            })),
+            child: Image.asset(
+              'assets/images/youtube_logo.png',
+              height: 40,
+              width: 80,
+            ),
           ),
           //search box
           Expanded(

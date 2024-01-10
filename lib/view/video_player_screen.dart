@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:video_audio_library/constants/other_const.dart';
 import 'package:video_audio_library/view/widgets/all_videos_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
+import 'widgets/appbar.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final VideoData videoData;
@@ -19,6 +22,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   late String _videoId;
   bool isLoaded = false;
+  bool isFullScreen = false;
 
   @override
   void initState() {
@@ -31,19 +35,25 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       mute: false,
       loop: false,
       enableCaption: true,
+      // showVideoAnnotations: false,
+      // enableJavaScript: false,
+      strictRelatedVideos: true,
     ));
 
-    _controller.setFullScreenListener((bool value) {
-      // log(
-      //   'FullScreen: ${value ? 'Entered' : 'Exited'}',
-      // );
+    _controller.setFullScreenListener((bool enteredFullScreen) {
+      log(
+        'FullScreen: ${enteredFullScreen ? 'Entered' : 'Exited'}',
+      );
+      isFullScreen = enteredFullScreen;
     });
     _controller.listen((event) {
       if (event.playerState == PlayerState.playing && isLoaded == false) {
         //to stop showing loading indicator when video started playing
-        setState(() {
-          isLoaded = true;
-        });
+        if (mounted) {
+          setState(() {
+            isLoaded = true;
+          });
+        }
       }
     });
     _videoId =
@@ -52,79 +62,119 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   @override
+  void dispose() {
+    log("disposed video player screen");
+    // _controller.stopVideo();
+    //_controller.close();//shows some warnings in console
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // log("build->isLoaded = $isLoaded, ");
-    return YoutubePlayerScaffold(
-      key: ValueKey(
-          isLoaded), //setstate will not rebuild this widget without using key
-      backgroundColor: Colors.green,
-      controller: _controller!,
-      autoFullScreen: false,
-      builder: (_, player) {
-        // log("entered here");
-        return Scaffold(
-          body: LayoutBuilder(builder: (context, constraints) {
-            if (kIsWeb && constraints.maxWidth > 800) {
-              //Desktop view
-              return Row(
-                children: [
-                  Expanded(
-                      flex: 3,
-                      child: Column(children: [
-                        Stack(
-                            children: [player, if (!isLoaded) LoadingWidget()]),
-                        SizedBox(height: 10),
-                        Suggestions(),
-                        Text(widget.videoData.title),
-                      ])),
-                  Expanded(
-                    flex: 2,
-                    //to do: show suggested videos based on the selected suggestion
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: AllVideosWidget(videosList: videosList),
-                    ),
-                  )
-                ],
-              );
-            }
-            //Mobile view
-            // log("isLoaded = $isLoaded, !isLoaded = ${!isLoaded}");
-            return Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-              child: Column(children: [
-                Expanded(
-                  flex: 3,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      // height: 200,
-                      child: Stack(
-                          children: [player, if (!isLoaded) LoadingWidget()]),
-                    ),
-                  ),
-                ),
-                Expanded(
-                    flex: 6,
-                    child: Column(children: [
-                      Expanded(
-                        //suggestions
-                        flex: 1,
-                        child: Suggestions(),
-                      ),
-                      //to do: filter list dynamically
-                      Expanded(
-                          flex: 7,
-                          child: AllVideosWidget(
-                            videosList: videosList,
-                          ))
-                    ]))
-              ]),
-            );
-          }),
-        );
+    final bool isDesktop = defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.windows;
+    final deviceWidth = MediaQuery.of(context).size.width;
+    log(" device width : $deviceWidth");
+    return VisibilityDetector(
+      key: ValueKey(UniqueKey()),
+      onVisibilityChanged: (visibilityInfo) {
+        final visiblePercentage = visibilityInfo.visibleFraction * 100;
+        if (visiblePercentage == 0) {
+          _controller.pauseVideo();
+        } else {
+          _controller.playVideo();
+        }
       },
+      child: Scaffold(
+        appBar: isFullScreen
+            ? null
+            : AppBarWidget(deviceSize: MediaQuery.of(context).size),
+        body: YoutubePlayerScaffold(
+          key: ValueKey(
+              "$isLoaded"), //setstate will not rebuild this widget without using key
+          backgroundColor: Colors.green,
+          controller: _controller,
+          autoFullScreen: false,
+          aspectRatio: 16 / 9,
+
+          builder: (_, player) {
+            // log("entered here");
+            return Scaffold(
+              body: LayoutBuilder(builder: (context, constraints) {
+                if (isDesktop && constraints.maxWidth > 1000) {
+                  //Desktop view
+                  return Row(
+                    children: [
+                      Expanded(
+                          flex: 3,
+                          child: Column(children: [
+                            Stack(children: [
+                              player,
+                              if (!isLoaded) LoadingWidget()
+                            ]),
+                            SizedBox(height: 10),
+                            Suggestions(),
+                            Text(widget.videoData.title),
+                          ])),
+                      Expanded(
+                        flex: 2,
+                        //to do: show suggested videos based on the selected suggestion
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: AllVideosWidget(videosList: videosList),
+                        ),
+                      )
+                    ],
+                  );
+                }
+                //Mobile view
+
+                return Padding(
+                  padding:
+                      EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                  child: Column(children: [
+                    Expanded(
+                      flex: isDesktop ? 9 : 4,
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        child: Container(
+                          //round border
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: isDesktop ? deviceWidth * 0.05 : 0.0),
+                          width: MediaQuery.of(context).size.width,
+                          child: Stack(children: [
+                            player,
+                            if (!isLoaded) LoadingWidget()
+                          ]),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                        flex: 6,
+                        child: Column(children: [
+                          Expanded(
+                            //suggestions
+                            flex: 2,
+                            child: Suggestions(),
+                          ),
+                          //to do: filter list dynamically
+                          Expanded(
+                              flex: 7,
+                              child: AllVideosWidget(
+                                videosList: videosList,
+                              ))
+                        ]))
+                  ]),
+                );
+              }),
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:video_audio_library/view/video_player_screen.dart';
 
 import '../../constants/device_constraints.dart';
 import '../../constants/other_const.dart';
-import 'youtube_player_iframe.dart';
 
 class AllVideosWidget extends StatefulWidget {
   //this will be passed from playlist page & not from home page
@@ -85,7 +84,12 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
       return Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(
-          horizontal: deviceWidth > 600 ? deviceWidth * 0.1 : 0,
+          horizontal: deviceWidth > 600 ||
+                  defaultTargetPlatform == TargetPlatform.macOS ||
+                  defaultTargetPlatform == TargetPlatform.linux ||
+                  defaultTargetPlatform == TargetPlatform.windows
+              ? deviceWidth * 0.1
+              : 0,
           vertical: widget.height != null ? widget.height! * 0.03 : 0,
         ),
         height: widget.height ?? DeviceConstraints.mainBodyHeight,
@@ -120,18 +124,8 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    // DefaultPlayer()
-                                    //     VideoPlayerSCreen(
-                                    //   videoData: videosList[index],
-                                    // ),
-                                    // YoutubeVideoPlayerScreen(
-                                    //     videoData: videosList[index]),
-                                    // YoutubePlayerIFrame(
-                                    //   videoData: videosList[index],
-                                    // ),
-                                    VideoPlayerScreen(
-                                        videoData: videosList[index]),
+                                builder: (context) => VideoPlayerScreen(
+                                    videoData: videosList[index]),
                               ),
                             );
                           },

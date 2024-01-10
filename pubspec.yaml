@@ -16,7 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
- # visibility_detector: ^0.4.0+2
+  visibility_detector: ^0.4.0+2
   #youtube_player_flutter: ^8.1.2 # more customizable yt video player but unstable
   youtube_player_iframe: ^4.0.4
 

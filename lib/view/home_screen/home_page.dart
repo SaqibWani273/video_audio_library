@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:video_audio_library/constants/other_const.dart';
 import '/constants/device_constraints.dart';
-import '/view/audio_homepage.dart';
+import '../audio_screen.dart';
 import 'widgets/all_videos_widget.dart';
 
-import 'widgets/appbar.dart';
+import '../common_widgets/appbar.dart';
 import 'widgets/categories_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(child: mainBodyWidgets[currentNavBarIndex]),
             ])
-          : AudioHomePage(),
+          : AudioScreen(),
       bottomNavigationBar: NavigationBar(
         height: DeviceConstraints.bottomNavBarHeight,
         selectedIndex: currentBottomNavBarIndex,
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
 final List<Widget> mainBodyWidgets = <Widget>[
   AllVideosWidget(videosList: videosList),
   CategoriesWidget(),
-  AllVideosWidget(videosList: videosList),
+  AllVideosWidget(videosList: videosList), //recommended videos
 ];
 
 class NavBar {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AudioHomePage extends StatelessWidget {
-  const AudioHomePage({super.key});
+class AudioScreen extends StatelessWidget {
+  const AudioScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

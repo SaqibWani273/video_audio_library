@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_audio_library/view/video_player_screen.dart';
+import 'package:video_audio_library/view/video_player_screen/video_player_screen.dart';
 
-import '../../constants/device_constraints.dart';
-import '../../constants/other_const.dart';
+import '../../../constants/device_constraints.dart';
+import '../../../constants/other_const.dart';
 
 class AllVideosWidget extends StatefulWidget {
   //this will be passed from playlist page & not from home page

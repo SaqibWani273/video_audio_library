@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '/view/widgets/category_header.dart';
+import 'category_header.dart';
 
-import '../../constants/other_const.dart';
-import '/view/widgets/all_videos_widget.dart';
-import 'appbar.dart';
+import '../../../constants/other_const.dart';
+import 'all_videos_widget.dart';
+import '../../common_widgets/appbar.dart';
 
 class CategoriesDetail extends StatelessWidget {
   final String playListImgUrl;

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:video_audio_library/view/home_page.dart';
+import 'package:video_audio_library/view/home_screen/home_page.dart';
 import '../../constants/device_constraints.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {

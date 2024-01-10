@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_audio_library/view/home_page.dart';
+import 'package:video_audio_library/view/home_screen/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {

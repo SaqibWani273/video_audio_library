@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_audio_library/constants/other_const.dart';
-import 'package:video_audio_library/view/widgets/all_videos_widget.dart';
+import 'package:video_audio_library/view/home_screen/widgets/all_videos_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import 'widgets/appbar.dart';
+import '../common_widgets/appbar.dart';
+import 'widgets/loading_widget.dart';
+import 'widgets/suggestions.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final VideoData videoData;
@@ -174,75 +176,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-enum SuggestionsEnum {
-  recommended,
-  all,
-  tafseer,
-  seerah,
-  fiqh,
-  hadees,
-  quran,
-  quranRecitation,
-  tafseerRecitation,
-  quranTafseerRecitation,
-  fiqh1,
-  hadees1,
-  quran1,
-  quranRecitation1,
-  tafseerRecitation1,
-  quranTafseerRecitation1,
-}
-
-class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-      child: Container(
-        color: Colors.black,
-        child: Center(
-            child: CircularProgressIndicator.adaptive(
-          backgroundColor: Colors.white,
-          // valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-          strokeWidth: 3.0,
-
-          strokeCap: StrokeCap.square,
-        )),
-      ),
-    );
-  }
-}
-
-class Suggestions extends StatelessWidget {
-  const Suggestions({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-            children: SuggestionsEnum.values
-                .map((e) => Container(
-                      margin: const EdgeInsets.all(8.0),
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.0),
-                        color: Colors.grey.shade200,
-                      ),
-                      child: Text(e.name.toUpperCase()),
-                    ))
-                .toList()),
       ),
     );
   }

@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_audio_library/repository/data_repo.dart';
-import 'package:video_audio_library/view/video_player_screen/video_player_screen.dart';
+import '../../../repository/data_repo.dart';
+import '../../../view/video_player_screen/video_player_screen.dart';
 
 import '../../../constants/device_constraints.dart';
-import '../../../constants/other_const.dart';
 import '../../../model/video_data_model.dart';
+import '../../../view_model/bloc/data_bloc_bloc.dart';
 
 class AllVideosWidget extends StatefulWidget {
   //this will be passed from playlist page & not from home page
@@ -84,103 +84,135 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
     // final deviceWidth = MediaQuery.of(context).size.width;
     final List<VideoDataModel> videosList =
         context.read<DataRepo>().videoDataModelList;
-    return LayoutBuilder(builder: (context, constraints) {
-      final deviceWidth = constraints.maxWidth;
-      return Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(
-          horizontal: deviceWidth > 600 ||
-                  defaultTargetPlatform == TargetPlatform.macOS ||
-                  defaultTargetPlatform == TargetPlatform.linux ||
-                  defaultTargetPlatform == TargetPlatform.windows
-              ? deviceWidth * 0.1
-              : 0,
-          vertical: widget.height != null ? widget.height! * 0.03 : 0,
-        ),
-        height: widget.height ?? DeviceConstraints.mainBodyHeight,
-        width: double.infinity,
-        child: RawKeyboardListener(
-          autofocus: true,
-          focusNode: _focusNode,
-          onKey: hanldeKeyEvents,
-          child: GridView.builder(
-              controller: _scrollController,
-              //  primary: true,
-              itemCount: videosList.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //   mainAxisSpacing: 16,
-                crossAxisSpacing: 24,
-                crossAxisCount: deviceWidth > 1100
-                    ? 3
-                    : deviceWidth > 700
-                        ? 2
-                        : 1,
-                childAspectRatio: 1.1,
+    return BlocBuilder<DataBlocBloc, DataBlocState>(
+      builder: (context, state) {
+        if (state is LaodedState) {
+          return LayoutBuilder(builder: (context, constraints) {
+            final deviceWidth = constraints.maxWidth;
+            return Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(
+                horizontal: deviceWidth > 600 ||
+                        defaultTargetPlatform == TargetPlatform.macOS ||
+                        defaultTargetPlatform == TargetPlatform.linux ||
+                        defaultTargetPlatform == TargetPlatform.windows
+                    ? deviceWidth * 0.1
+                    : 0,
+                vertical: widget.height != null ? widget.height! * 0.03 : 0,
               ),
-              itemBuilder: (context, index) {
-                return Container(
-                  // // alignment: Alignment.center,
-                  // margin: const EdgeInsets.only(bottom: 24.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => VideoPlayerScreen(
-                                      videoDataModel: videosList[index]),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    kIsWeb ? BorderRadius.circular(16.0) : null,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: kIsWeb
-                                    ? BorderRadius.circular(16.0)
-                                    : BorderRadius.circular(0.0),
-                                child: Image.network(
-                                  videosList[index].thumbnailUrl,
-                                  fit: BoxFit.fill,
-                                  loadingBuilder: (context, child, progress) {
-                                    return progress == null
-                                        ? child
-                                        : Stack(children: [
-                                            Container(
-                                              color: Colors.grey.shade200,
-                                            ),
-                                            const Positioned(
-                                              bottom: 0,
-                                              left: 0,
-                                              right: 0,
-                                              child: LinearProgressIndicator(),
-                                            ),
-                                          ]);
+              height: widget.height ?? DeviceConstraints.mainBodyHeight,
+              width: double.infinity,
+              child: RawKeyboardListener(
+                autofocus: true,
+                focusNode: _focusNode,
+                onKey: hanldeKeyEvents,
+                child: GridView.builder(
+                    controller: _scrollController,
+                    //  primary: true,
+                    itemCount: videosList.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      //   mainAxisSpacing: 16,
+                      crossAxisSpacing: 24,
+                      crossAxisCount: deviceWidth > 1100
+                          ? 3
+                          : deviceWidth > 700
+                              ? 2
+                              : 1,
+                      childAspectRatio: 1.1,
+                    ),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        // // alignment: Alignment.center,
+                        // margin: const EdgeInsets.only(bottom: 24.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => VideoPlayerScreen(
+                                            videoDataModel: videosList[index]),
+                                      ),
+                                    );
                                   },
+                                  child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: kIsWeb
+                                          ? BorderRadius.circular(16.0)
+                                          : null,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: kIsWeb
+                                          ? BorderRadius.circular(16.0)
+                                          : BorderRadius.circular(0.0),
+                                      child: Image.network(
+                                        videosList[index].thumbnailUrl,
+                                        fit: BoxFit.fill,
+                                        loadingBuilder:
+                                            (context, child, progress) {
+                                          return progress == null
+                                              ? child
+                                              : Stack(children: [
+                                                  Container(
+                                                    color: Colors.grey.shade200,
+                                                  ),
+                                                  const Positioned(
+                                                    bottom: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    child:
+                                                        LinearProgressIndicator(),
+                                                  ),
+                                                ]);
+                                        },
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 16.0),
-                          child: Text(videosList[index].videoDescription),
-                        ),
-                      ]),
-                );
-              }),
-        ),
-      );
-    });
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 16.0),
+                                child: Text(videosList[index].videoDescription),
+                              ),
+                            ]),
+                      );
+                    }),
+              ),
+            );
+          });
+        }
+        if (state is ErrorState) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(state.message),
+              TextButton.icon(
+                onPressed: () {
+                  context
+                      .read<DataBlocBloc>()
+                      .add(LoadDataFromFirestoreApiEvent());
+                },
+                icon: const Icon(Icons.error_outline_sharp),
+                label: const Text("Try Again"),
+              ),
+            ],
+          );
+        }
+
+        //loading data or any other state
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
+    );
+    //........
   }
 }

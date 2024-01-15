@@ -14,9 +14,15 @@ class DataBlocBloc extends Bloc<DataBlocEvent, DataBlocState> {
   }
   Future<void> _loadData(
       LoadDataFromFirestoreApiEvent event, Emitter<DataBlocState> emit) async {
-    emit(LoadingState());
-    await dataRepo.loadData();
-    log("inside bloc, ${dataRepo.videoDataModelList.length}");
-    emit(LaodedState());
+    try {
+      emit(LoadingState());
+      await dataRepo.loadData();
+      log("inside bloc, ${dataRepo.videoDataModelList.length}");
+      emit(LaodedState());
+    } on CustomException catch (e) {
+      emit(ErrorState(message: e.message));
+    } catch (e) {
+      emit(ErrorState(message: " Something went wrong !"));
+    }
   }
 }

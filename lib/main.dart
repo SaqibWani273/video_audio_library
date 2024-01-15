@@ -31,18 +31,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: customTheme,
-      home: RepositoryProvider(
-        create: (context) => DataRepo(),
-        child: BlocProvider(
-          create: (context) => DataBlocBloc(dataRepo: context.read<DataRepo>())
-            ..add(LoadDataFromFirestoreApiEvent()),
-          child: SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: const HomePage(),
+    return RepositoryProvider(
+      create: (context) => DataRepo(),
+      child: BlocProvider(
+        create: (context) => DataBlocBloc(dataRepo: context.read<DataRepo>())
+          ..add(LoadDataFromFirestoreApiEvent()),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: customTheme,
+              home: const HomePage(),
             ),
           ),
         ),

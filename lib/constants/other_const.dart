@@ -1,7 +1,4 @@
-import 'package:video_audio_library/constants/api_keys.dart';
-
-const demoUrl =
-    "https://firebasestorage.googleapis.com/v0/b/video-audio-library.appspot.com/o/videos%2Fthumbnails%2F14832137_5517053.jpg?alt=media&token=$firebaseStorageToken";
+import 'firestore_api_const.dart';
 
 const demoVideoUrl1 = "https://www.youtube.com/watch?v=KJwYBJMSbPI";
 const demoVideoUrl2 = "https://www.youtube.com/watch?v=i6tc3Pdj62M&t=629s";

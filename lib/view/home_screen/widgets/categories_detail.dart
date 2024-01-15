@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../constants/firestore_api_const.dart';
 import 'category_header.dart';
 
 import '../../../constants/other_const.dart';
@@ -52,7 +53,7 @@ class CategoriesDetail extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (context) => Scaffold(
                                       body: AllVideosWidget(
-                                        videosList: playList.videos,
+                                        // videosList: playList.videos,
                                         height:
                                             MediaQuery.of(context).size.height,
                                       ),

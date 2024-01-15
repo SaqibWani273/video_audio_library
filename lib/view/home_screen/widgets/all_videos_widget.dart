@@ -1,18 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_audio_library/repository/data_repo.dart';
 import 'package:video_audio_library/view/video_player_screen/video_player_screen.dart';
 
 import '../../../constants/device_constraints.dart';
 import '../../../constants/other_const.dart';
+import '../../../model/video_data_model.dart';
 
 class AllVideosWidget extends StatefulWidget {
   //this will be passed from playlist page & not from home page
   final double? height;
-  final List<VideoData> videosList;
+  // final List<VideoData> videosList;
   const AllVideosWidget({
     super.key,
-    required this.videosList,
+    // required this.videosList,
     this.height,
   });
 
@@ -79,6 +82,8 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
   @override
   Widget build(BuildContext context) {
     // final deviceWidth = MediaQuery.of(context).size.width;
+    final List<VideoDataModel> videosList =
+        context.read<DataRepo>().videoDataModelList;
     return LayoutBuilder(builder: (context, constraints) {
       final deviceWidth = constraints.maxWidth;
       return Container(
@@ -119,44 +124,46 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => VideoPlayerScreen(
-                                    videoData: videosList[index]),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => VideoPlayerScreen(
+                                      videoDataModel: videosList[index]),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    kIsWeb ? BorderRadius.circular(16.0) : null,
                               ),
-                            );
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  kIsWeb ? BorderRadius.circular(16.0) : null,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: kIsWeb
-                                  ? BorderRadius.circular(16.0)
-                                  : BorderRadius.circular(0.0),
-                              child: Image.network(
-                                videosList[index].imageUrl,
-                                fit: BoxFit.fill,
-                                loadingBuilder: (context, child, progress) {
-                                  return progress == null
-                                      ? child
-                                      : Stack(children: [
-                                          Container(
-                                            color: Colors.grey.shade200,
-                                          ),
-                                          const Positioned(
-                                            bottom: 0,
-                                            left: 0,
-                                            right: 0,
-                                            child: LinearProgressIndicator(),
-                                          ),
-                                        ]);
-                                },
+                              child: ClipRRect(
+                                borderRadius: kIsWeb
+                                    ? BorderRadius.circular(16.0)
+                                    : BorderRadius.circular(0.0),
+                                child: Image.network(
+                                  videosList[index].thumbnailUrl,
+                                  fit: BoxFit.fill,
+                                  loadingBuilder: (context, child, progress) {
+                                    return progress == null
+                                        ? child
+                                        : Stack(children: [
+                                            Container(
+                                              color: Colors.grey.shade200,
+                                            ),
+                                            const Positioned(
+                                              bottom: 0,
+                                              left: 0,
+                                              right: 0,
+                                              child: LinearProgressIndicator(),
+                                            ),
+                                          ]);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -165,8 +172,9 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
                           height: 10,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(videosList[index].title),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 16.0),
+                          child: Text(videosList[index].videoDescription),
                         ),
                       ]),
                 );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_audio_library/constants/other_const.dart';
+import 'package:video_audio_library/view_model/bloc/data_bloc_bloc.dart';
 import '/constants/device_constraints.dart';
 import '../audio_screen.dart';
 import 'widgets/all_videos_widget.dart';
@@ -22,85 +24,97 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     DeviceConstraints.deviceHeight = deviceSize.height;
-    return Scaffold(
-      extendBody: true,
-      appBar: currentBottomNavBarIndex == 0
-          ? AppBarWidget(deviceSize: deviceSize)
-          : null,
-      body: currentBottomNavBarIndex == 0
-          ? Column(children: [
-              //topNavbar
-              SizedBox(
-                height: DeviceConstraints.topNavBarHeight,
-                child: Row(
-                  children: topNavItems
-                      .map(
-                        (e) => Expanded(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(24),
-                            onTap: () {
-                              setState(() {
-                                currentNavBarIndex = topNavItems.indexOf(e);
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Column(
-                                children: [
-                                  Icon(e.icon),
-                                  Text(e.title),
-                                  if (currentNavBarIndex ==
-                                      topNavItems.indexOf(e))
-                                    Container(
-                                      height: 4,
-                                      width: 24,
-                                      margin: EdgeInsets.only(top: 16.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
+    return BlocBuilder<DataBlocBloc, DataBlocState>(
+      builder: (context, state) {
+        if (state is LaodedState) {
+          return Scaffold(
+            extendBody: true,
+            appBar: currentBottomNavBarIndex == 0
+                ? AppBarWidget(deviceSize: deviceSize)
+                : null,
+            body: currentBottomNavBarIndex == 0
+                ? Column(children: [
+                    //topNavbar
+                    SizedBox(
+                      height: DeviceConstraints.topNavBarHeight,
+                      child: Row(
+                        children: topNavItems
+                            .map(
+                              (e) => Expanded(
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(24),
+                                  onTap: () {
+                                    setState(() {
+                                      currentNavBarIndex =
+                                          topNavItems.indexOf(e);
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Column(
+                                      children: [
+                                        Icon(e.icon),
+                                        Text(e.title),
+                                        if (currentNavBarIndex ==
+                                            topNavItems.indexOf(e))
+                                          Container(
+                                            height: 4,
+                                            width: 24,
+                                            margin: EdgeInsets.only(top: 16.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                      ],
                                     ),
-                                ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-              SizedBox(
-                height: DeviceConstraints.heightMargin,
-              ),
-              Expanded(child: mainBodyWidgets[currentNavBarIndex]),
-            ])
-          : AudioScreen(),
-      bottomNavigationBar: NavigationBar(
-        height: DeviceConstraints.bottomNavBarHeight,
-        selectedIndex: currentBottomNavBarIndex,
-        onDestinationSelected: (int index) {
-          if (index == 1) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Center(child: Text("Coming Soon ...")),
-            ));
-          }
-          setState(() {
-            currentBottomNavBarIndex = index;
-          });
-        },
-        destinations: bottomNavItems
-            .map((e) =>
-                NavigationDestination(icon: Icon(e.icon), label: e.title))
-            .toList(),
-      ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: DeviceConstraints.heightMargin,
+                    ),
+                    Expanded(child: mainBodyWidgets[currentNavBarIndex]),
+                  ])
+                : AudioScreen(),
+            bottomNavigationBar: NavigationBar(
+              height: DeviceConstraints.bottomNavBarHeight,
+              selectedIndex: currentBottomNavBarIndex,
+              onDestinationSelected: (int index) {
+                if (index == 1) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Center(child: Text("Coming Soon ...")),
+                  ));
+                }
+                setState(() {
+                  currentBottomNavBarIndex = index;
+                });
+              },
+              destinations: bottomNavItems
+                  .map((e) =>
+                      NavigationDestination(icon: Icon(e.icon), label: e.title))
+                  .toList(),
+            ),
+          );
+        }
+        //loading data or error state
+        return Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
     );
   }
 }
 
 final List<Widget> mainBodyWidgets = <Widget>[
-  AllVideosWidget(videosList: videosList),
+  AllVideosWidget(),
   CategoriesWidget(),
-  AllVideosWidget(videosList: videosList), //recommended videos
+  AllVideosWidget(), //recommended videos
 ];
 
 class NavBar {

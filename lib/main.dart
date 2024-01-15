@@ -2,8 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_audio_library/view/home_screen/home_page.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'repository/data_repo.dart';
+
+import 'view/home_screen/home_page.dart';
+
+import 'constants/custom_theme.dart';
+import 'view_model/bloc/data_bloc_bloc.dart';
 
 Future<void> main() async {
   log(
@@ -28,29 +33,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          // fontFamily:GoogleFonts.openSansCondensed().fontFamily,
-          textTheme: GoogleFonts.openSansCondensedTextTheme(
-              ThemeData.light().textTheme.copyWith(
-                    bodyLarge: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    bodyMedium: const TextStyle(fontWeight: FontWeight.w600),
-                    bodySmall: const TextStyle(fontWeight: FontWeight.w600),
-
-                    //for search field in appbar
-                    titleMedium: const TextStyle(fontWeight: FontWeight.w600),
-
-                    //for bottom nav
-                    labelSmall: const TextStyle(fontWeight: FontWeight.w600),
-                  )),
-          useMaterial3: false,
-          scaffoldBackgroundColor: Colors.white),
-      home: SingleChildScrollView(
-          child: SizedBox(
+      theme: customTheme,
+      home: RepositoryProvider(
+        create: (context) => DataRepo(),
+        child: BlocProvider(
+          create: (context) => DataBlocBloc(dataRepo: context.read<DataRepo>())
+            ..add(LoadDataFromFirestoreApiEvent()),
+          child: SingleChildScrollView(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height,
-              child: const HomePage())),
+              child: const HomePage(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

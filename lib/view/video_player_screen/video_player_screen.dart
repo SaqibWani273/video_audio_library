@@ -2,8 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:video_audio_library/constants/other_const.dart';
-import 'package:video_audio_library/view/home_screen/widgets/all_videos_widget.dart';
+import 'package:video_audio_library/model/video_data_model.dart';
+import '/constants/other_const.dart';
+import '/view/home_screen/widgets/all_videos_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -12,8 +13,8 @@ import 'widgets/loading_widget.dart';
 import 'widgets/suggestions.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
-  final VideoData videoData;
-  const VideoPlayerScreen({super.key, required this.videoData});
+  final VideoDataModel videoDataModel;
+  const VideoPlayerScreen({super.key, required this.videoDataModel});
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
@@ -58,8 +59,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         }
       }
     });
-    _videoId =
-        YoutubePlayerController.convertUrlToId(widget.videoData.videoUrl) ?? "";
+    _videoId = YoutubePlayerController.convertUrlToId(
+            widget.videoDataModel.videoUrl) ??
+        "";
     _controller.loadVideoById(videoId: _videoId);
   }
 
@@ -117,14 +119,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             ]),
                             SizedBox(height: 10),
                             Suggestions(),
-                            Text(widget.videoData.title),
+                            Text(widget.videoDataModel.videoDescription),
                           ])),
                       Expanded(
                         flex: 2,
                         //to do: show suggested videos based on the selected suggestion
                         child: Padding(
                           padding: const EdgeInsets.all(24.0),
-                          child: AllVideosWidget(videosList: videosList),
+                          child: AllVideosWidget(),
                         ),
                       )
                     ],
@@ -164,11 +166,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             child: Suggestions(),
                           ),
                           //to do: filter list dynamically
-                          Expanded(
-                              flex: 7,
-                              child: AllVideosWidget(
-                                videosList: videosList,
-                              ))
+                          Expanded(flex: 7, child: AllVideosWidget())
                         ]))
                   ]),
                 );

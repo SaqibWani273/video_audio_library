@@ -74,3 +74,11 @@ class VideoData {
     required this.videoUrl,
   });
 }
+
+enum CategoriesEnum {
+  Tafseer,
+  Fiqh,
+  Seerah,
+  Hadith,
+  Other,
+}

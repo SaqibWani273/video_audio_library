@@ -2,20 +2,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../repository/data_repo.dart';
-import '../../../view/video_player_screen/video_player_screen.dart';
+import 'package:video_audio_library/view/common_widgets/error_screen.dart';
 
 import '../../../constants/device_constraints.dart';
 import '../../../model/video_data_model.dart';
-import '../../../view_model/bloc/data_bloc_bloc.dart';
+import '../../../repository/data_repo.dart';
+import '../../../view/video_player_screen/video_player_screen.dart';
+import '../../../view_model/data_bloc/data_bloc_bloc.dart';
 
 class AllVideosWidget extends StatefulWidget {
   //this will be passed from playlist page & not from home page
   final double? height;
-  // final List<VideoData> videosList;
+  final List<VideoDataModel>? videosList;
   const AllVideosWidget({
     super.key,
-    // required this.videosList,
+    this.videosList,
     this.height,
   });
 
@@ -24,6 +25,8 @@ class AllVideosWidget extends StatefulWidget {
 }
 
 class _AllVideosWidgetState extends State<AllVideosWidget> {
+  late final List<VideoDataModel> videosList;
+
   //to have scroll effect same as youtube on desktop
   final ScrollController _scrollController = ScrollController();
   final FocusNode _focusNode = FocusNode();
@@ -64,6 +67,13 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
     }
   }
 
+  @override
+  void initState() {
+    videosList =
+        widget.videosList ?? context.read<DataRepo>().videoDataModelList;
+    super.initState();
+  }
+
   void scrollToAnimate(double position) {
     _scrollController.animateTo(
       position,
@@ -82,8 +92,7 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
   @override
   Widget build(BuildContext context) {
     // final deviceWidth = MediaQuery.of(context).size.width;
-    final List<VideoDataModel> videosList =
-        context.read<DataRepo>().videoDataModelList;
+
     return BlocBuilder<DataBlocBloc, DataBlocState>(
       builder: (context, state) {
         if (state is LaodedState) {
@@ -190,21 +199,13 @@ class _AllVideosWidgetState extends State<AllVideosWidget> {
           });
         }
         if (state is ErrorState) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(state.message),
-              TextButton.icon(
-                onPressed: () {
-                  context
-                      .read<DataBlocBloc>()
-                      .add(LoadDataFromFirestoreApiEvent());
-                },
-                icon: const Icon(Icons.error_outline_sharp),
-                label: const Text("Try Again"),
-              ),
-            ],
-          );
+          return ErrorScreen(
+              errorMessage: state.message,
+              onPressed: () {
+                context
+                    .read<DataBlocBloc>()
+                    .add(LoadDataFromFirestoreApiEvent());
+              });
         }
 
         //loading data or any other state

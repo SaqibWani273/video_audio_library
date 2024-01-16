@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:video_audio_library/model/video_data_model.dart';
-import '/view/home_screen/widgets/all_videos_widget.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../common_widgets/appbar.dart';
+import '/model/video_data_model.dart';
+import '/view/home_screen/widgets/all_videos_widget.dart';
 import 'widgets/loading_widget.dart';
 import 'widgets/suggestions.dart';
 
@@ -114,17 +114,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           child: Column(children: [
                             Stack(children: [
                               player,
-                              if (!isLoaded) LoadingWidget()
+                              if (!isLoaded) const LoadingWidget()
                             ]),
-                            SizedBox(height: 10),
-                            Suggestions(),
+                            const SizedBox(height: 10),
+                            Suggestions(
+                              currentVideoDataModel: widget.videoDataModel,
+                            ),
                             Text(widget.videoDataModel.videoDescription),
                           ])),
-                      Expanded(
+                      const Expanded(
                         flex: 2,
                         //to do: show suggested videos based on the selected suggestion
                         child: Padding(
-                          padding: const EdgeInsets.all(24.0),
+                          padding: EdgeInsets.all(24.0),
                           child: AllVideosWidget(),
                         ),
                       )
@@ -151,22 +153,28 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           width: MediaQuery.of(context).size.width,
                           child: Stack(children: [
                             player,
-                            if (!isLoaded) LoadingWidget()
+                            if (!isLoaded) const LoadingWidget()
                           ]),
                         ),
                       ),
                     ),
+                    //suggested videos
                     Expanded(
                         flex: 6,
-                        child: Column(children: [
-                          Expanded(
-                            //suggestions
-                            flex: 2,
-                            child: Suggestions(),
-                          ),
-                          //to do: filter list dynamically
-                          Expanded(flex: 7, child: AllVideosWidget())
-                        ]))
+                        child: Suggestions(
+                          currentVideoDataModel: widget.videoDataModel,
+                        )
+
+                        //  Column(children: [
+                        //   Expanded(
+                        //     //suggestions
+                        //     flex: 2,
+                        //     child: Suggestions( currentVideoDataModel: widget.videoDataModel),
+                        //   ),
+                        //   //to do: filter list dynamically
+                        //   Expanded(flex: 7, child: AllVideosWidget())
+                        // ]),
+                        )
                   ]),
                 );
               }),

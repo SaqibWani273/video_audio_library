@@ -8,7 +8,8 @@ import 'repository/data_repo.dart';
 import 'view/home_screen/home_page.dart';
 
 import 'constants/custom_theme.dart';
-import 'view_model/bloc/data_bloc_bloc.dart';
+import 'view_model/data_bloc/data_bloc_bloc.dart';
+import 'view_model/suggested_videos_bloc/suggested_videos_bloc.dart';
 
 Future<void> main() async {
   log(
@@ -32,21 +33,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (context) => DataRepo(),
-      child: BlocProvider(
-        create: (context) => DataBlocBloc(dataRepo: context.read<DataRepo>())
-          ..add(LoadDataFromFirestoreApiEvent()),
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: customTheme,
-              home: const HomePage(),
+        create: (context) => DataRepo(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) =>
+                  DataBlocBloc(dataRepo: context.read<DataRepo>())
+                    ..add(LoadDataFromFirestoreApiEvent()),
+            ),
+            BlocProvider(
+              create: (context) =>
+                  SuggestedVideosBloc(dataRepo: context.read<DataRepo>()),
+            ),
+          ],
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: customTheme,
+            home: SingleChildScrollView(
+              child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: const HomePage()),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

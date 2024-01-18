@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import '../../../constants/firestore_api_const.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../model/playlist.dart';
+import '../../../repository/data_repo.dart';
 import 'category_header.dart';
 
-import '../../../constants/other_const.dart';
 import 'all_videos_widget.dart';
 import '../../common_widgets/appbar.dart';
 
@@ -19,6 +22,8 @@ class CategoriesDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
+    final playLists = context.read<DataRepo>().playLists;
+    log("playlists -> ${playLists[0].imageUrl}");
     return Scaffold(
       appBar: AppBarWidget(deviceSize: MediaQuery.of(context).size),
       body: Row(children: [
@@ -91,7 +96,7 @@ class CategoriesDetail extends StatelessWidget {
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           Text(
-                                            "${playList.videos.length} videos",
+                                            "${playList.videos!.length} videos",
                                           ),
                                           const Icon(
                                               Icons.playlist_play_rounded)
@@ -132,7 +137,7 @@ class CategoriesDetail extends StatelessWidget {
                                         height: 20,
                                       ),
                                       Text(
-                                        "${playList.videos.length} Lectures",
+                                        "${playList.videos!.length} Lectures",
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall
@@ -151,66 +156,66 @@ class CategoriesDetail extends StatelessWidget {
   }
 }
 
-class PlayList {
-  final String nameInEnglish;
-  final String nameInArabic;
-  final String? imageUrl;
-  final List<VideoData> videos;
-  PlayList({
-    required this.nameInEnglish,
-    required this.nameInArabic,
-    this.imageUrl,
-    required this.videos,
-  });
-}
+// class PlayList {
+//   final String nameInEnglish;
+//   final String nameInArabic;
+//   final String? imageUrl;
+//   final List<VideoData> videos;
+//   PlayList({
+//     required this.nameInEnglish,
+//     required this.nameInArabic,
+//     this.imageUrl,
+//     required this.videos,
+//   });
+// }
 
-final List<PlayList> playLists = <PlayList>[
-  PlayList(
-    nameInEnglish: 'Tafseer Surah tul Fatihah',
-    nameInArabic: 'تفسير القرآن',
-    // imageUrl: demoUrl,
-    videos: videosList,
-  ),
-  PlayList(
-    nameInEnglish: 'Tafseer ul Quran',
-    nameInArabic: 'تفسير القرآن',
-    imageUrl: demoUrl,
-    videos: videosList,
-  ),
-  PlayList(
-    nameInEnglish: 'Tafseer ul Quran',
-    nameInArabic: 'تفسير القرآن',
-    // imageUrl: demoUrl,
-    videos: videosList,
-  ),
-  PlayList(
-    nameInEnglish: 'Tafseer ul Quran',
-    nameInArabic: 'تفسير القرآن',
-    imageUrl: demoUrl,
-    videos: videosList,
-  ),
-  PlayList(
-    nameInEnglish: 'Tafseer ul Quran',
-    nameInArabic: 'تفسير القرآن',
-    imageUrl: demoUrl,
-    videos: videosList,
-  ),
-  PlayList(
-    nameInEnglish: 'Tafseer ul Quran',
-    nameInArabic: 'تفسير القرآن',
-    // imageUrl: demoUrl,
-    videos: videosList,
-  ),
-  PlayList(
-    nameInEnglish: 'Tafseer ul Quran',
-    nameInArabic: 'تفسير القرآن',
-    imageUrl: demoUrl,
-    videos: videosList,
-  ),
-  PlayList(
-    nameInEnglish: 'Tafseer ul Quran',
-    nameInArabic: 'تفسير القرآن',
-    imageUrl: demoUrl,
-    videos: videosList,
-  ),
-];
+// final List<PlayList> playLists = <PlayList>[
+//   PlayList(
+//     nameInEnglish: 'Tafseer Surah tul Fatihah',
+//     nameInArabic: 'تفسير القرآن',
+//     // imageUrl: demoUrl,
+//     videos: videosList,
+//   ),
+//   PlayList(
+//     nameInEnglish: 'Tafseer ul Quran',
+//     nameInArabic: 'تفسير القرآن',
+//     imageUrl: demoUrl,
+//     videos: videosList,
+//   ),
+//   PlayList(
+//     nameInEnglish: 'Tafseer ul Quran',
+//     nameInArabic: 'تفسير القرآن',
+//     // imageUrl: demoUrl,
+//     videos: videosList,
+//   ),
+//   PlayList(
+//     nameInEnglish: 'Tafseer ul Quran',
+//     nameInArabic: 'تفسير القرآن',
+//     imageUrl: demoUrl,
+//     videos: videosList,
+//   ),
+//   PlayList(
+//     nameInEnglish: 'Tafseer ul Quran',
+//     nameInArabic: 'تفسير القرآن',
+//     imageUrl: demoUrl,
+//     videos: videosList,
+//   ),
+//   PlayList(
+//     nameInEnglish: 'Tafseer ul Quran',
+//     nameInArabic: 'تفسير القرآن',
+//     // imageUrl: demoUrl,
+//     videos: videosList,
+//   ),
+//   PlayList(
+//     nameInEnglish: 'Tafseer ul Quran',
+//     nameInArabic: 'تفسير القرآن',
+//     imageUrl: demoUrl,
+//     videos: videosList,
+//   ),
+//   PlayList(
+//     nameInEnglish: 'Tafseer ul Quran',
+//     nameInArabic: 'تفسير القرآن',
+//     imageUrl: demoUrl,
+//     videos: videosList,
+//   ),
+// ];

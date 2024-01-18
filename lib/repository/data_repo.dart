@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
-import '../constants/other_const.dart';
+import 'package:video_audio_library/model/category.dart';
+import '../model/playlist.dart';
 import '/model/video_data_model.dart';
 
 import '../constants/firestore_api_const.dart';
@@ -10,6 +11,9 @@ import '../constants/firestore_api_const.dart';
 class DataRepo {
   List<VideoDataModel> videoDataModelList = [];
   List<VideoDataModel> suggestedVideosList = [];
+  List<Category> categories = [];
+  List<String> suggestionTagNames = [];
+  final List<PlayList> playLists = <PlayList>[];
 
   //to load data from firestore api
   Future<void> loadData() async {
@@ -33,14 +37,51 @@ class DataRepo {
     }
   }
 
-  final List<String> suggestionTagNames = [
-    // "recommended",// add it later
-    "all",
-    //categories having same name as specified in video_data_model
-    ...CategoriesEnum.values.map(
-      (e) => e.name,
-    )
-  ];
+  Future<void> loadCategories() async {
+    try {
+      final response =
+          await http.get(Uri.parse(FirestoreApiConst.getCategoriesUrl));
+      if (response.statusCode != 200) {
+        throw CustomException(
+            type: ExceptionType.network, message: " Network Error !");
+      }
+      // log(" loadCategories -> ${response.body}");
+      var i = 0;
+      for (var category in jsonDecode(response.body)["documents"]) {
+        categories.add(Category.fromMap(category["fields"]));
+        //to do : change it late, temp solution
+        playLists.add(PlayList.fromMap(category["fields"]));
+        playLists[i] = playLists[i].copyWith(
+          videos: videoDataModelList
+              .where(
+                  (element) => element.category == playLists[i].nameInEnglish)
+              .toList(),
+        );
+        i++;
+      }
+      playLists.forEach((element) {
+        log("playlist -> ${element.nameInEnglish} = ${element.videos?.length}");
+      });
+      //suggestions while video is plaing
+      suggestionTagNames = [
+        // "recommended",// add it later
+        "all",
+
+        ...categories.map((e) => e.nameInEnglish).toList()
+        // CategoriesEnum.values.map(
+        //   (e) => e.name,
+        // )
+      ];
+    } on http.ClientException catch (_) {
+      throw CustomException(
+          type: ExceptionType.network, message: " Network Error !");
+    } catch (e) {
+      log(" Error in loadCategories -> $e");
+      throw CustomException(
+          type: ExceptionType.unknown, message: " Something went wrong !");
+    }
+  }
+
   int filterSuggestions({required String suggestionTagName}) {
     suggestedVideosList = suggestionTagName == "all"
         ? videoDataModelList

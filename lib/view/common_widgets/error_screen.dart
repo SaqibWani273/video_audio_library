@@ -15,7 +15,7 @@ class ErrorScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.error_outline_sharp),
-            Spacer(),
+            const Spacer(),
             Text(errorMessage),
             TextButton(
               onPressed: onPressed,
@@ -25,6 +25,5 @@ class ErrorScreen extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

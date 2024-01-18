@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_audio_library/constants/other_const.dart';
 
 import '../../repository/data_repo.dart';
 
@@ -18,11 +17,16 @@ class DataBlocBloc extends Bloc<DataBlocEvent, DataBlocState> {
     try {
       emit(LoadingState());
       await dataRepo.loadData();
+      if (dataRepo.categories.isEmpty) {
+        await dataRepo.loadCategories();
+      }
 
       emit(LaodedState());
     } on CustomException catch (e) {
+      log(e.message);
       emit(ErrorState(message: e.message));
     } catch (e) {
+      log(e.toString());
       emit(ErrorState(message: " Something went wrong !"));
     }
   }

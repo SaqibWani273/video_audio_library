@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../home_screen/widgets/all_videos_widget.dart';
 import '/model/video_data_model.dart';
 import '/repository/data_repo.dart';
 import '/view/common_widgets/error_screen.dart';
 import '/view_model/suggested_videos_bloc/suggested_videos_bloc.dart';
-import '../../home_screen/widgets/all_videos_widget.dart';
 
 class Suggestions extends StatefulWidget {
   final VideoDataModel currentVideoDataModel;

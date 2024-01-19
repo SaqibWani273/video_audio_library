@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:video_audio_library/view/common_widgets/my_scroll_widget.dart';
 import '/constants/device_constraints.dart';
 import '../audio_screen.dart';
-import 'widgets/all_videos_widget.dart';
+import 'widgets/videos_list_widget.dart';
 
 import '../common_widgets/appbar.dart';
 import 'widgets/categories_widget.dart';
@@ -97,9 +98,9 @@ class _HomePageState extends State<HomePage> {
 }
 
 final List<Widget> mainBodyWidgets = <Widget>[
-  AllVideosWidget(),
+  VideosListWidget(),
   CategoriesWidget(),
-  AllVideosWidget(), //recommended videos
+  VideosListWidget(), //recommended videos
 ];
 
 class NavBar {

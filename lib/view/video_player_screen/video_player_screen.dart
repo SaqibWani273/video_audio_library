@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:video_audio_library/view/common_widgets/my_scroll_widget.dart';
+import 'package:video_audio_library/view/common_widgets/network_image_loader.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../common_widgets/appbar.dart';
 import '/model/video_data_model.dart';
-import '/view/home_screen/widgets/all_videos_widget.dart';
 import 'widgets/loading_widget.dart';
 import 'widgets/suggestions.dart';
 
@@ -117,30 +118,34 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               if (!isLoaded) const LoadingWidget()
                             ]),
                             const SizedBox(height: 10),
-                            Suggestions(
-                              currentVideoDataModel: widget.videoDataModel,
-                            ),
                             Text(widget.videoDataModel.videoDescription),
                           ])),
-                      const Expanded(
+                      Expanded(
                         flex: 2,
                         //to do: show suggested videos based on the selected suggestion
                         child: Padding(
                           padding: EdgeInsets.all(24.0),
-                          child: AllVideosWidget(),
+                          child:
+                              //  DesktopSuggestions(
+                              //   suggestedVideos:
+                              //       context.read<DataRepo>().videoDataModelList,
+                              // )
+                              Suggestions(
+                            currentVideoDataModel: widget.videoDataModel,
+                          ),
                         ),
                       )
                     ],
                   );
                 }
-                //Mobile view
+                //Mobile view / tablet view (not only for mobile but for desktop too)
 
                 return Padding(
                   padding:
                       EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                   child: Column(children: [
                     Expanded(
-                      flex: isDesktop ? 9 : 4,
+                      flex: isDesktop ? 8 : 4,
                       child: FittedBox(
                         fit: BoxFit.fill,
                         child: Container(
@@ -158,29 +163,91 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         ),
                       ),
                     ),
+                    Expanded(
+                        child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: isDesktop ? deviceWidth * 0.05 : 0.02,
+                          vertical: 8.0),
+                      child: Text(widget.videoDataModel.videoDescription),
+                    )),
                     //suggested videos
                     Expanded(
-                        flex: 6,
+                        flex: 4,
                         child: Suggestions(
                           currentVideoDataModel: widget.videoDataModel,
-                        )
-
-                        //  Column(children: [
-                        //   Expanded(
-                        //     //suggestions
-                        //     flex: 2,
-                        //     child: Suggestions( currentVideoDataModel: widget.videoDataModel),
-                        //   ),
-                        //   //to do: filter list dynamically
-                        //   Expanded(flex: 7, child: AllVideosWidget())
-                        // ]),
-                        )
+                        ))
                   ]),
                 );
               }),
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class DesktopSuggestions extends StatelessWidget {
+  final List<VideoDataModel> suggestedVideos;
+  DesktopSuggestions({super.key, required this.suggestedVideos});
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    return MyScrollWidget(
+      scrollController: _scrollController,
+      // videosList: suggestedVideos,
+      currentWidget: ListView.builder(
+        // primary: true,
+        controller: _scrollController,
+        itemCount: suggestedVideos.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      VideoPlayerScreen(videoDataModel: suggestedVideos[index]),
+                ),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.0),
+                        child: NetworkImageLoader(
+                            imageUrl: suggestedVideos[index].thumbnailUrl),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      flex: deviceWidth > 1100
+                          ? 3
+                          : deviceWidth > 600
+                              ? 2
+                              : 1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Text(
+                          suggestedVideos[index].videoDescription,
+                        ),
+                      ))
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

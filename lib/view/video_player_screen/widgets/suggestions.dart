@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_audio_library/view/common_widgets/my_scroll_widget.dart';
+import 'package:video_audio_library/view/video_player_screen/video_player_screen.dart';
 
-import '../../home_screen/widgets/all_videos_widget.dart';
+import '../../home_screen/widgets/videos_list_widget.dart';
 import '/model/video_data_model.dart';
 import '/repository/data_repo.dart';
 import '/view/common_widgets/error_screen.dart';
@@ -17,6 +20,7 @@ class Suggestions extends StatefulWidget {
 
 class _SuggestionsState extends State<Suggestions> {
   late DataRepo dataRepo;
+  final ScrollController scrollController = ScrollController();
   int currentIndex = 0;
   @override
   void initState() {
@@ -29,14 +33,16 @@ class _SuggestionsState extends State<Suggestions> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
     return Column(children: [
       Expanded(
         //suggestion tagname
-        flex: 2,
+        flex: deviceWidth > 1000 ? 1 : 4,
         child: SizedBox(
           child: Stack(
             children: [
               SingleChildScrollView(
+                primary: true,
                 scrollDirection: Axis.horizontal,
                 child: Center(
                   child: Padding(
@@ -98,9 +104,18 @@ class _SuggestionsState extends State<Suggestions> {
         if (state is LaodedState) {
           return Expanded(
             flex: 7,
-            child: AllVideosWidget(
-              videosList: dataRepo.suggestedVideosList,
-            ),
+            child: defaultTargetPlatform == TargetPlatform.macOS ||
+                    defaultTargetPlatform == TargetPlatform.linux ||
+                    defaultTargetPlatform == TargetPlatform.windows
+                ? DesktopSuggestions(
+                    suggestedVideos: dataRepo.suggestedVideosList)
+                : VideosListWidget(
+                    videosList: dataRepo.suggestedVideosList,
+                  ),
+
+            //  AllVideosWidget(
+            //     videosList: dataRepo.suggestedVideosList,
+            //   ),
           );
         }
         if (state is ErrorState) {

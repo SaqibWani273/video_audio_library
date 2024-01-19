@@ -1,29 +1,29 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_audio_library/view/common_widgets/my_scroll_widget.dart';
 import '../../../model/playlist.dart';
 import '../../../repository/data_repo.dart';
 import 'category_header.dart';
 
-import 'all_videos_widget.dart';
+import 'videos_list_widget.dart';
 import '../../common_widgets/appbar.dart';
 
 class CategoriesDetail extends StatelessWidget {
   final String playListImgUrl;
   final String playListName;
   final String playListNameInArabic;
-  const CategoriesDetail({
+  CategoriesDetail({
     super.key,
     required this.playListImgUrl,
     required this.playListName,
     required this.playListNameInArabic,
   });
+  final _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     final playLists = context.read<DataRepo>().playLists;
-    log("playlists -> ${playLists[0].imageUrl}");
+
     return Scaffold(
       appBar: AppBarWidget(deviceSize: MediaQuery.of(context).size),
       body: Row(children: [
@@ -57,12 +57,19 @@ class CategoriesDetail extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => Scaffold(
-                                      body: AllVideosWidget(
-                                        // videosList: playList.videos,
-                                        height:
-                                            MediaQuery.of(context).size.height,
-                                      ),
-                                    ),
+                                        body: MyScrollWidget(
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                      currentWidget: VideosListWidget(),
+                                      scrollController: _scrollController,
+                                    )
+
+                                        //  AllVideosWidget(
+                                        //   // videosList: playList.videos,
+                                        //   height:
+                                        //       MediaQuery.of(context).size.height,
+                                        // ),
+                                        ),
                                   ),
                                 );
                               },

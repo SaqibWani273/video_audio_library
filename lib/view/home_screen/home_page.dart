@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:video_audio_library/view/common_widgets/my_scroll_widget.dart';
 import '/constants/device_constraints.dart';
 import '../audio_screen.dart';
 import 'widgets/videos_list_widget.dart';
@@ -17,6 +16,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var currentNavBarIndex = 0;
   var currentBottomNavBarIndex = 0;
+  final List<Widget> mainBodyWidgets = <Widget>[
+    const VideosListWidget(),
+    const CategoriesWidget(),
+    const VideosListWidget(), //recommended videos
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                                     Container(
                                       height: 4,
                                       width: 24,
-                                      margin: EdgeInsets.only(top: 16.0),
+                                      margin: const EdgeInsets.only(top: 16.0),
                                       decoration: BoxDecoration(
                                         color: Colors.black,
                                         borderRadius: BorderRadius.circular(8),
@@ -74,13 +78,13 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(child: mainBodyWidgets[currentNavBarIndex]),
             ])
-          : AudioScreen(),
+          : const AudioScreen(),
       bottomNavigationBar: NavigationBar(
         height: DeviceConstraints.bottomNavBarHeight,
         selectedIndex: currentBottomNavBarIndex,
         onDestinationSelected: (int index) {
           if (index == 1) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Center(child: Text("Coming Soon ...")),
             ));
           }
@@ -96,12 +100,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-final List<Widget> mainBodyWidgets = <Widget>[
-  VideosListWidget(),
-  CategoriesWidget(),
-  VideosListWidget(), //recommended videos
-];
 
 class NavBar {
   String title;

@@ -1,11 +1,36 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_audio_library/repository/data_repo.dart';
+import 'package:video_audio_library/view/common_widgets/search_results.dart';
 import 'package:video_audio_library/view/home_screen/home_page.dart';
+import 'package:video_audio_library/view_model/data_bloc/data_bloc_bloc.dart';
 import '../../constants/device_constraints.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Size deviceSize;
-  const AppBarWidget({super.key, required this.deviceSize});
+  AppBarWidget({super.key, required this.deviceSize});
+  final _searchController = TextEditingController();
+  void searchVideo(String val, BuildContext context) {
+    //to check for each word from the search query
+    final lowerSearchValueList = val.toLowerCase().split(' ');
+
+    final allVideos = context.read<DataRepo>().videoDataModelList;
+    //filter videos where videodescription or category contains
+    // one or more words from the search query
+    final filteredVideos = allVideos.where((element) {
+      return lowerSearchValueList.any((searchWord) =>
+          element.videoDescription.toLowerCase().contains(searchWord) ||
+          element.category.toLowerCase().contains(searchWord));
+    }).toList();
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SearchResults(
+        searchResults: filteredVideos,
+      );
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +71,23 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.grey.shade50,
                 elevation: 4.0,
                 shadowColor: Colors.black26,
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: _searchController,
+                    onFieldSubmitted: (value) {
+                      searchVideo(value, context);
+                    },
                     decoration: InputDecoration(
                       hintText: "Search videos",
-                      suffixIcon: Icon(Icons.search),
+                      suffixIcon: InkWell(
+                          onTap: () {
+                            if (_searchController.text.trim().isNotEmpty) {
+                              searchVideo(
+                                  _searchController.text.trim(), context);
+                            }
+                          },
+                          child: Icon(Icons.search)),
                       border: InputBorder.none,
                     ),
                   ),

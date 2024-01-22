@@ -31,7 +31,7 @@ class _MyScrollWidgetState extends State<MyScrollWidget> {
   final FocusNode _focusNode = FocusNode();
   String? previousLogicalKeyboardKey;
 
-  void hanldeKeyEvents(RawKeyEvent event) {
+  void hanldeKeyEvents(KeyEvent event) {
     //to do : handle long press of arrow down and arrow up keys appropriately as youtube
 
     var offset = widget.scrollController.offset;
@@ -108,10 +108,10 @@ class _MyScrollWidgetState extends State<MyScrollWidget> {
         ),
         height: widget.height ?? DeviceConstraints.mainBodyHeight,
         width: double.infinity,
-        child: RawKeyboardListener(
+        child: KeyboardListener(
           autofocus: true,
           focusNode: _focusNode,
-          onKey: hanldeKeyEvents,
+          onKeyEvent: hanldeKeyEvents,
           child: widget.currentWidget,
         ),
       );

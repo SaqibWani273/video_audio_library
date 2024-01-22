@@ -42,7 +42,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       // enableJavaScript: false,
       strictRelatedVideos: true,
     ));
-
+    _videoId = YoutubePlayerController.convertUrlToId(
+            widget.videoDataModel.videoUrl) ??
+        "";
+    loadVideo();
     _controller.setFullScreenListener((bool enteredFullScreen) {
       log(
         'FullScreen: ${enteredFullScreen ? 'Entered' : 'Exited'}',
@@ -54,15 +57,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         //to stop showing loading indicator when video started playing
         if (mounted) {
           setState(() {
+            log("setstate called");
             isLoaded = true;
           });
         }
       }
     });
-    _videoId = YoutubePlayerController.convertUrlToId(
-            widget.videoDataModel.videoUrl) ??
-        "";
-    _controller.loadVideoById(videoId: _videoId);
+  }
+
+  Future<void> loadVideo() async {
+    await _controller.loadVideoById(videoId: _videoId);
   }
 
   @override
@@ -91,9 +95,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         }
       },
       child: Scaffold(
-        appBar: isFullScreen
-            ? null
-            : AppBarWidget(deviceSize: MediaQuery.of(context).size),
+        appBar: isDesktop && !isFullScreen
+            ? AppBarWidget(deviceSize: MediaQuery.of(context).size)
+            : null,
         body: YoutubePlayerScaffold(
           key: ValueKey(
               "$isLoaded"), //setstate will not rebuild this widget without using key
@@ -118,19 +122,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               if (!isLoaded) const LoadingWidget()
                             ]),
                             const SizedBox(height: 10),
-                            Text(widget.videoDataModel.videoDescription),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child:
+                                  Text(widget.videoDataModel.videoDescription),
+                            ),
                           ])),
                       Expanded(
                         flex: 2,
                         //to do: show suggested videos based on the selected suggestion
                         child: Padding(
-                          padding: EdgeInsets.all(24.0),
-                          child:
-                              //  DesktopSuggestions(
-                              //   suggestedVideos:
-                              //       context.read<DataRepo>().videoDataModelList,
-                              // )
-                              Suggestions(
+                          padding: EdgeInsets.all(8.0),
+                          child: Suggestions(
                             currentVideoDataModel: widget.videoDataModel,
                           ),
                         ),
@@ -145,7 +149,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                   child: Column(children: [
                     Expanded(
-                      flex: isDesktop ? 8 : 4,
+                      flex: isDesktop ? 8 : 3,
                       child: FittedBox(
                         fit: BoxFit.fill,
                         child: Container(
@@ -164,12 +168,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       ),
                     ),
                     Expanded(
-                        child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: isDesktop ? deviceWidth * 0.05 : 0.02,
-                          vertical: 8.0),
+                        child: Center(
+                            child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(widget.videoDataModel.videoDescription),
-                    )),
+                    ))),
                     //suggested videos
                     Expanded(
                         flex: 4,

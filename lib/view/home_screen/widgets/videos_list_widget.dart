@@ -12,12 +12,12 @@ import '../../common_widgets/network_image_loader.dart';
 
 class VideosListWidget extends StatefulWidget {
   //this will be passed from playlist page & not from home page
-  // final double? height;
+  final double? height;
   final List<VideoDataModel>? videosList;
   const VideosListWidget({
     super.key,
     this.videosList,
-    // this.height,
+    this.height,
   });
 
   @override
@@ -39,9 +39,13 @@ class _VideosListWidgetState extends State<VideosListWidget> {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
+    final isDesktop = defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.windows;
 
     return MyScrollWidget(
       scrollController: _scrollController,
+      height: widget.height,
       currentWidget: BlocBuilder<DataBlocBloc, DataBlocState>(
         builder: (context, state) {
           if (state is LaodedState) {
@@ -80,12 +84,12 @@ class _VideosListWidgetState extends State<VideosListWidget> {
                               child: Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  borderRadius: kIsWeb
+                                  borderRadius: isDesktop
                                       ? BorderRadius.circular(16.0)
                                       : null,
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: kIsWeb
+                                  borderRadius: isDesktop
                                       ? BorderRadius.circular(16.0)
                                       : BorderRadius.circular(0.0),
                                   child: NetworkImageLoader(

@@ -49,9 +49,10 @@ class CategoriesWidget extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return CategoriesDetail(
-                        playListImgUrl: categories[index].imgUrl,
-                        playListName: categories[index].nameInEnglish,
-                        playListNameInArabic: categories[index].nameInArabic,
+                        category: categories[index],
+                        // playListImgUrl: categories[index].imgUrl,
+                        // playListName: categories[index].nameInEnglish,
+                        // playListNameInArabic: categories[index].nameInArabic,
                       );
                     }));
                   },
@@ -92,47 +93,3 @@ class CategoriesWidget extends StatelessWidget {
     );
   }
 }
-
-// final List<Category> categories = [
-//   Category(
-//     nameInEnglish: 'Tafseer ul Quran',
-//     nameInArabic: 'تفسير القرآن',
-//     imageUrl: demoUrl,
-//   ),
-//   Category(
-//     nameInEnglish: 'Tafseer ul Quran',
-//     nameInArabic: 'تفسير القرآن',
-//     imageUrl: demoUrl,
-//   ),
-//   Category(
-//     nameInEnglish: 'Tafseer ul Quran',
-//     nameInArabic: 'تفسير القرآن',
-//     imageUrl: demoUrl,
-//   ),
-//   Category(
-//     nameInEnglish: 'Tafseer ul Quran',
-//     nameInArabic: 'تفسير القرآن',
-//     imageUrl: demoUrl,
-//   ),
-//   Category(
-//     nameInEnglish: 'Tafseer ul Quran',
-//     nameInArabic: 'تفسير القرآن',
-//     imageUrl: demoUrl,
-//   ),
-//   Category(
-//     nameInEnglish: 'Tafseer ul Quran',
-//     nameInArabic: 'تفسير القرآن',
-//     imageUrl: demoUrl,
-//   ),
-// ];
-
-// class Category {
-//   final String nameInEnglish;
-//   final String nameInArabic;
-//   final String imageUrl;
-//   Category({
-//     required this.nameInEnglish,
-//     required this.nameInArabic,
-//     required this.imageUrl,
-//   });
-// }

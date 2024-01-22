@@ -46,22 +46,46 @@ class DataRepo {
             type: ExceptionType.network, message: " Network Error !");
       }
       // log(" loadCategories -> ${response.body}");
-      var i = 0;
+      // var i = 0;
       for (var category in jsonDecode(response.body)["documents"]) {
-        categories.add(Category.fromMap(category["fields"]));
+        log("data -> ${category["fields"]["nameInEnglish"]["stringValue"]}");
+        var tempCategory = Category.fromMap(category["fields"]);
+        tempCategory = tempCategory.copyWith(playLists: [
+          PlayList(
+              nameInEnglish: "ALL",
+              nameInArabic: " الكل ",
+              videos: videoDataModelList
+                  .where((element) =>
+                      element.category ==
+                      category["fields"]["nameInEnglish"]["stringValue"])
+                  .toList()),
+        ]);
+
+        categories.add(tempCategory);
+        // categories
+        //     .add(
+        //       Category.fromMap(category["fields"]).copyWith(playLists: [
+        //   PlayList(
+        //       nameInEnglish: "ALL",
+        //       nameInArabic: " الكل ",
+        //       videos: videoDataModelList
+        //           .where((element) =>
+        //               element.category ==
+        //               category["fields"]["nameInEnglish"]["stringValue"])
+        //           .toList()),
+        // ]));
+
         //to do : change it late, temp solution
-        playLists.add(PlayList.fromMap(category["fields"]));
-        playLists[i] = playLists[i].copyWith(
-          videos: videoDataModelList
-              .where(
-                  (element) => element.category == playLists[i].nameInEnglish)
-              .toList(),
-        );
-        i++;
+        // playLists.add(PlayList.fromMap(category["fields"]));
+        // playLists[i] = playLists[i].copyWith(
+        //   videos: videoDataModelList
+        //       .where(
+        //           (element) => element.category == playLists[i].nameInEnglish)
+        //       .toList(),
+        // );
+        // i++;
       }
-      playLists.forEach((element) {
-        log("playlist -> ${element.nameInEnglish} = ${element.videos?.length}");
-      });
+
       //suggestions while video is plaing
       suggestionTagNames = [
         // "recommended",// add it later

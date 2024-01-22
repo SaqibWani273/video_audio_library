@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,10 +36,14 @@ class _SuggestionsState extends State<Suggestions> {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
+    final isDesktop = defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.windows;
+    log("devicewidth: $deviceWidth");
     return Column(children: [
       Expanded(
         //suggestion tagname
-        flex: deviceWidth > 1000 ? 1 : 4,
+        flex: deviceWidth < 1000 && isDesktop ? 4 : 1,
         child: SizedBox(
           child: Stack(
             children: [
@@ -104,9 +110,7 @@ class _SuggestionsState extends State<Suggestions> {
         if (state is LaodedState) {
           return Expanded(
             flex: 7,
-            child: defaultTargetPlatform == TargetPlatform.macOS ||
-                    defaultTargetPlatform == TargetPlatform.linux ||
-                    defaultTargetPlatform == TargetPlatform.windows
+            child: isDesktop
                 ? DesktopSuggestions(
                     suggestedVideos: dataRepo.suggestedVideosList)
                 : VideosListWidget(

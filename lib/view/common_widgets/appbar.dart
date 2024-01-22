@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_audio_library/repository/data_repo.dart';
+import 'package:video_audio_library/utils/search_video.dart';
 import 'package:video_audio_library/view/common_widgets/search_results.dart';
 import 'package:video_audio_library/view/home_screen/home_page.dart';
 import 'package:video_audio_library/view_model/data_bloc/data_bloc_bloc.dart';
@@ -13,23 +14,15 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Size deviceSize;
   AppBarWidget({super.key, required this.deviceSize});
   final _searchController = TextEditingController();
-  void searchVideo(String val, BuildContext context) {
-    //to check for each word from the search query
-    final lowerSearchValueList = val.toLowerCase().split(' ');
-
-    final allVideos = context.read<DataRepo>().videoDataModelList;
-    //filter videos where videodescription or category contains
-    // one or more words from the search query
-    final filteredVideos = allVideos.where((element) {
-      return lowerSearchValueList.any((searchWord) =>
-          element.videoDescription.toLowerCase().contains(searchWord) ||
-          element.category.toLowerCase().contains(searchWord));
-    }).toList();
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SearchResults(
-        searchResults: filteredVideos,
-      );
-    }));
+  void searchVideos(String val, BuildContext context) {
+    if (val.isNotEmpty) {
+      final filteredVideos = Utils().searchVideo(val, context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return SearchResults(
+          searchResults: filteredVideos,
+        );
+      }));
+    }
   }
 
   @override
@@ -49,7 +42,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               return const HomePage();
             })),
             child: Image.asset(
-              'assets/images/youtube_logo.png',
+              'assets/images/demo_icon_video_library.png',
               height: 40,
               width: 80,
             ),
@@ -76,16 +69,14 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   child: TextFormField(
                     controller: _searchController,
                     onFieldSubmitted: (value) {
-                      searchVideo(value, context);
+                      searchVideos(value.trim(), context);
                     },
                     decoration: InputDecoration(
                       hintText: "Search videos",
                       suffixIcon: InkWell(
                           onTap: () {
-                            if (_searchController.text.trim().isNotEmpty) {
-                              searchVideo(
-                                  _searchController.text.trim(), context);
-                            }
+                            searchVideos(
+                                _searchController.text.trim(), context);
                           },
                           child: Icon(Icons.search)),
                       border: InputBorder.none,

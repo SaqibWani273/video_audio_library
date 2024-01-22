@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_audio_library/view/common_widgets/network_image_loader.dart';
 
 class CategoryHeader extends StatelessWidget {
   final String playListImgUrl;
@@ -29,10 +30,12 @@ class CategoryHeader extends StatelessWidget {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                      child: Image.network(
-                    playListImgUrl,
+                      child: NetworkImageLoader(
+                    imageUrl: playListImgUrl,
                   )),
-                  Expanded(child: Text("$playListName\n$playListNameInArabic"))
+                  Expanded(
+                      child: Center(
+                          child: Text("$playListName\n$playListNameInArabic")))
                 ],
               )),
               Expanded(

@@ -3,6 +3,7 @@
     <application
         android:label="video_audio_library"
         android:name="${applicationName}"
+        
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
         >

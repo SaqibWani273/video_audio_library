@@ -19,7 +19,9 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> mainBodyWidgets = <Widget>[
     const VideosListWidget(),
     const CategoriesWidget(),
-    const VideosListWidget(), //recommended videos
+    const Center(
+      child: Text("Recommended Videos will appear here soon !"),
+    ), //recommended videos
   ];
 
   @override

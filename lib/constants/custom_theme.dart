@@ -9,7 +9,8 @@ final customTheme = ThemeData(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            bodyMedium: const TextStyle(fontWeight: FontWeight.w600),
+            bodyMedium:
+                const TextStyle(fontWeight: FontWeight.w600, wordSpacing: 4.0),
             bodySmall: const TextStyle(fontWeight: FontWeight.w600),
 
             //for search field in appbar

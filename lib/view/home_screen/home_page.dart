@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:video_audio_library/view/biography/biography_screen.dart';
 import '/constants/device_constraints.dart';
 import '../audio_screen.dart';
 import 'widgets/videos_list_widget.dart';
@@ -116,11 +117,14 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(child: mainBodyWidgets[currentNavBarIndex]),
             ])
-          : const AudioScreen(),
+          : currentBottomNavBarIndex == 1
+              ? const AudioScreen()
+              : const BiographyScreen(),
       bottomNavigationBar: NavigationBar(
         height: DeviceConstraints.bottomNavBarHeight,
         selectedIndex: currentBottomNavBarIndex,
         onDestinationSelected: (int index) {
+          log("index = $index");
           if (index == 1) {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Center(child: Text("Coming Soon ...")),
@@ -153,4 +157,5 @@ final List<NavBar> topNavItems = <NavBar>[
 final List<NavBar> bottomNavItems = <NavBar>[
   NavBar(title: 'VIDEOS', icon: Icons.video_settings),
   NavBar(title: 'AUDIOS', icon: Icons.audio_file_outlined),
+  NavBar(title: 'BIOGRAPHY', icon: Icons.person),
 ];

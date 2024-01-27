@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:video_audio_library/view/common_widgets/my_scroll_widget.dart';
-import 'package:video_audio_library/view/common_widgets/network_image_loader.dart';
+import 'package:NUHA/view/common_widgets/my_scroll_widget.dart';
+import 'package:NUHA/view/common_widgets/network_image_loader.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -96,7 +96,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       },
       child: Scaffold(
         appBar: isDesktop && !isFullScreen
-            ? AppBarWidget(deviceSize: MediaQuery.of(context).size)
+            ? AppBarWidget(
+                deviceSize: MediaQuery.of(context).size, page: "videoPlayer")
             : null,
         body: YoutubePlayerScaffold(
           key: ValueKey(

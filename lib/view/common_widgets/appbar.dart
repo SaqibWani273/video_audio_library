@@ -3,16 +3,17 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_audio_library/repository/data_repo.dart';
-import 'package:video_audio_library/utils/search_video.dart';
-import 'package:video_audio_library/view/common_widgets/search_results.dart';
-import 'package:video_audio_library/view/home_screen/home_page.dart';
-import 'package:video_audio_library/view_model/data_bloc/data_bloc_bloc.dart';
+import 'package:NUHA/repository/data_repo.dart';
+import 'package:NUHA/utils/search_video.dart';
+import 'package:NUHA/view/common_widgets/search_results.dart';
+import 'package:NUHA/view/home_screen/home_page.dart';
+import 'package:NUHA/view_model/data_bloc/data_bloc_bloc.dart';
 import '../../constants/device_constraints.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Size deviceSize;
-  AppBarWidget({super.key, required this.deviceSize});
+  final String page;
+  AppBarWidget({super.key, required this.deviceSize, required this.page});
   final _searchController = TextEditingController();
   void searchVideos(String val, BuildContext context) {
     if (val.isNotEmpty) {
@@ -37,10 +38,14 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           InkWell(
-            onTap: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return const HomePage();
-            })),
+            onTap: () => {
+              if (Navigator.canPop(context) && page != "homePage")
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const HomePage();
+                  }))
+                }
+            },
             child: Image.asset(
               'assets/images/demo_icon_video_library.png',
               height: 40,
@@ -61,7 +66,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               ),
 
               child: Card(
-                color: Colors.grey.shade50,
+                color: Color.fromARGB(255, 164, 161, 161),
                 elevation: 4.0,
                 shadowColor: Colors.black26,
                 child: Padding(

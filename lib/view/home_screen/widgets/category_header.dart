@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:video_audio_library/view/common_widgets/network_image_loader.dart';
+import 'package:NUHA/view/common_widgets/network_image_loader.dart';
 
 class CategoryHeader extends StatelessWidget {
   final String playListImgUrl;

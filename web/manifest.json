@@ -1,6 +1,6 @@
 {
-    "name": "video_audio_library",
-    "short_name": "video_audio_library",
+    "name": "NUHA",
+    "short_name": "NUHA",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

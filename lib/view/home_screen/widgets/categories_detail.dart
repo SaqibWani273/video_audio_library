@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_audio_library/model/category.dart';
-import 'package:video_audio_library/view/common_widgets/my_scroll_widget.dart';
-import 'package:video_audio_library/view/common_widgets/network_image_loader.dart';
+import 'package:NUHA/model/category.dart';
+import 'package:NUHA/view/common_widgets/my_scroll_widget.dart';
+import 'package:NUHA/view/common_widgets/network_image_loader.dart';
 import '../../../model/playlist.dart';
 import '../../../repository/data_repo.dart';
 import 'category_header.dart';
@@ -29,7 +29,8 @@ class CategoriesDetail extends StatelessWidget {
     // final playLists = context.read<DataRepo>().playLists;
 
     return Scaffold(
-      appBar: AppBarWidget(deviceSize: MediaQuery.of(context).size),
+      appBar: AppBarWidget(
+          deviceSize: MediaQuery.of(context).size, page: "categoryDetails"),
       body: Row(children: [
         if (deviceWidth > 800)
           //playlist tilte and image and other options like youtube has

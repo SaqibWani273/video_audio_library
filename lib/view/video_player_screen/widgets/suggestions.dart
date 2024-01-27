@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_audio_library/view/common_widgets/my_scroll_widget.dart';
-import 'package:video_audio_library/view/video_player_screen/video_player_screen.dart';
+import 'package:NUHA/view/common_widgets/my_scroll_widget.dart';
+import 'package:NUHA/view/video_player_screen/video_player_screen.dart';
 
 import '../../home_screen/widgets/videos_list_widget.dart';
 import '/model/video_data_model.dart';

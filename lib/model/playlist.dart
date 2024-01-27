@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:video_audio_library/model/video_data_model.dart';
+import 'package:NUHA/model/video_data_model.dart';
 
 class PlayList {
   final String nameInEnglish;

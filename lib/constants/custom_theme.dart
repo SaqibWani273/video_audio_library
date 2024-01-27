@@ -19,5 +19,5 @@ final customTheme = ThemeData(
             labelSmall: const TextStyle(fontWeight: FontWeight.w600),
           )),
   useMaterial3: false,
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: Color.fromARGB(255, 209, 213, 215),
 );

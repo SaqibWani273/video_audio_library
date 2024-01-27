@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:video_audio_library/constants/biography_text.dart';
+import 'package:NUHA/constants/biography_text.dart';
 
 class BiographyScreen extends StatefulWidget {
   const BiographyScreen({super.key});

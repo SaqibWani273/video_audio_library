@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:video_audio_library/view/biography/biography_screen.dart';
+import 'package:NUHA/view/biography/biography_screen.dart';
 import '/constants/device_constraints.dart';
 import '../audio_screen.dart';
 import 'widgets/videos_list_widget.dart';

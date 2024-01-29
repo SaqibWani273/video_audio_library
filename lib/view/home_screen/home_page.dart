@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:NUHA/view/biography/biography_screen.dart';
 import '/constants/device_constraints.dart';
 import '../audio_screen.dart';
@@ -20,37 +19,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var currentNavBarIndex = 0;
   var currentBottomNavBarIndex = 0;
-
-  final ScrollController _scrollController = ScrollController();
-  bool _isAppBarVisible = true;
-
-  @override
-  void initState() {
-    super.initState();
-    print("message.......");
-
-    // Listen to scroll events
-    _scrollController.addListener(() {
-      if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        // Scroll direction is up, show app bar
-        if (!_isAppBarVisible) {
-          setState(() {
-            _isAppBarVisible = true;
-          });
-        }
-      } else if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        // Scroll direction is down, hide app bar
-        if (_isAppBarVisible) {
-          setState(() {
-            _isAppBarVisible = false;
-          });
-        }
-      }
-    });
-  }
-
   final List<Widget> mainBodyWidgets = <Widget>[
     const VideosListWidget(),
     const CategoriesWidget(),
@@ -66,9 +34,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBody: true,
       appBar: currentBottomNavBarIndex == 0
-          ? _isAppBarVisible
-              ? AppBarWidget(deviceSize: deviceSize, page: "homePage")
-              : null
+          ? AppBarWidget(deviceSize: deviceSize, page: "homePage")
           : null,
       body: currentBottomNavBarIndex == 0
           ? Column(children: [

@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
             ),
           ],
           child: MaterialApp(
+            title: "NUHA",
             debugShowCheckedModeBanner: false,
             theme: customTheme,
             home: SingleChildScrollView(

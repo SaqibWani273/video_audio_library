@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '/model/video_data_model.dart';
 import '/view/home_screen/widgets/videos_list_widget.dart';
-import 'error_screen.dart';
 
 class SearchResults extends StatefulWidget {
   final List<VideoDataModel> searchResults;
@@ -22,7 +21,7 @@ class _SearchResultsState extends State<SearchResults> {
           title: const Text("Search Results"),
         ),
         body: widget.searchResults.isEmpty
-            ? Center(child: Text("no results found"))
+            ? const Center(child: Text("no results found"))
             : SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: Padding(

@@ -1,13 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:NUHA/repository/data_repo.dart';
 import 'package:NUHA/utils/search_video.dart';
 import 'package:NUHA/view/common_widgets/search_results.dart';
 import 'package:NUHA/view/home_screen/home_page.dart';
-import 'package:NUHA/view_model/data_bloc/data_bloc_bloc.dart';
 import '../../constants/device_constraints.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {

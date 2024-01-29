@@ -54,9 +54,9 @@ class _BiographyScreenState extends State<BiographyScreen>
             //adjsut for wider screens
             if (deviceWidth > 950) {
               aspectHeight = e.value.length > 600
-                  ? 300
+                  ? 350
                   : e.value.length > 400
-                      ? 200
+                      ? 250
                       : 150;
             }
 

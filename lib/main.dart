@@ -21,7 +21,7 @@ Future<void> main() async {
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.white,
+    statusBarColor: Color.fromARGB(255, 209, 213, 215),
     statusBarIconBrightness: Brightness.dark,
   ));
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);

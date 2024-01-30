@@ -32,6 +32,13 @@ class _BiographyScreenState extends State<BiographyScreen>
   }
 
   @override
+  dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;

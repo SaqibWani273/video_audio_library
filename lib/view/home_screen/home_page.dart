@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
       extendBody: true,
       appBar: currentBottomNavBarIndex == 0
           ? _isAppBarVisible
-              ? AppBarWidget(deviceSize: deviceSize, page: "homePage")
+              ? const AppBarWidget(page: "homePage")
               : null
           : null,
       body: currentBottomNavBarIndex == 0

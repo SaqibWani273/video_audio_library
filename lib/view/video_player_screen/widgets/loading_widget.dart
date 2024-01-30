@@ -12,7 +12,7 @@ class LoadingWidget extends StatelessWidget {
       right: 0,
       child: Container(
         color: Colors.black,
-        child: Center(
+        child: const Center(
             child: CircularProgressIndicator.adaptive(
           backgroundColor: Colors.white,
           // valueColor: AlwaysStoppedAnimation<Color>(Colors.white),

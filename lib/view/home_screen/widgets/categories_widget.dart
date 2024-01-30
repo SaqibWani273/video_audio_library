@@ -52,9 +52,6 @@ class CategoriesWidget extends StatelessWidget {
                               MaterialPageRoute(builder: (context) {
                             return CategoriesDetail(
                               category: categories[index],
-                              // playListImgUrl: categories[index].imgUrl,
-                              // playListName: categories[index].nameInEnglish,
-                              // playListNameInArabic: categories[index].nameInArabic,
                             );
                           }));
                         },
@@ -65,35 +62,13 @@ class CategoriesWidget extends StatelessWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(16.0),
-                                  child:
-                                      // Image.asset(
-                                      //   "assets/images/demo.png",
-                                      //   fit: BoxFit.fill,
-                                      // )
-                                      NetworkImageLoader(
-                                              imageUrl:
-                                                  categories[index].imgUrl)
-                                          .animate()
-                                          .fadeIn(
-                                              //delay till both the texts are shown
-                                              delay: 1300.ms,
-                                              duration: 1000.ms)
-                                  // .scale(
-                                  //     duration: 1000.ms,
-                                  //     // begin: Offset(0.0, 0.0),
-                                  //     curve: Curves.easeOut)
-                                  //     Image.network(
-                                  //   categories[index].imgUrl,
-                                  //   fit: BoxFit.fill,
-                                  // )
-
-                                  // .animate()
-                                  // .slideY(
-                                  //     delay: Duration(seconds: 2),
-                                  //     begin: -10,
-                                  //     duration: 500.ms,
-                                  //     curve: Curves.easeOut),
-                                  ),
+                                  child: NetworkImageLoader(
+                                          imageUrl: categories[index].imgUrl)
+                                      .animate()
+                                      .fadeIn(
+                                          //delay till both the texts are shown
+                                          delay: 1300.ms,
+                                          duration: 1000.ms)),
                             ),
                           ),
                           // SizedBox(
@@ -111,7 +86,7 @@ class CategoriesWidget extends StatelessWidget {
                                   duration: 300.ms,
                                   curve: Curves.easeOut)
                               .scale(
-                                begin: Offset(0.0, 0.0),
+                                begin: const Offset(0.0, 0.0),
                               ),
                           Expanded(
                             child: Text(
@@ -127,7 +102,7 @@ class CategoriesWidget extends StatelessWidget {
                                   duration: 300.ms,
                                   curve: Curves.easeOut)
                               .scale(
-                                begin: Offset(0.0, 0.0),
+                                begin: const Offset(0.0, 0.0),
                               ),
                         ]),
                       ),

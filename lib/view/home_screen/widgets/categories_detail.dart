@@ -20,8 +20,7 @@ class CategoriesDetail extends StatelessWidget {
     // final playLists = context.read<DataRepo>().playLists;
 
     return Scaffold(
-      appBar: AppBarWidget(
-          deviceSize: MediaQuery.of(context).size, page: "categoryDetails"),
+      appBar: const AppBarWidget(page: "categoryDetails"),
       body: Row(children: [
         if (deviceWidth > 800)
           //playlist tilte and image and other options like youtube has

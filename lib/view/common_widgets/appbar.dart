@@ -3,13 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:NUHA/utils/search_video.dart';
 import 'package:NUHA/view/common_widgets/search_results.dart';
 import 'package:NUHA/view/home_screen/home_page.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../constants/device_constraints.dart';
 
-class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  final Size deviceSize;
+class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
+  // final Size deviceSize;
   final String page;
-  AppBarWidget({super.key, required this.deviceSize, required this.page});
+  const AppBarWidget({super.key, required this.page});
+
+  @override
+  State<AppBarWidget> createState() => _AppBarWidgetState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(DeviceConstraints.appBarHeight);
+}
+
+class _AppBarWidgetState extends State<AppBarWidget> {
   final _searchController = TextEditingController();
+  bool isIconPressed = false;
+
   void searchVideos(String val, BuildContext context) {
     if (val.isNotEmpty) {
       final filteredVideos = Utils().searchVideo(val, context);
@@ -25,7 +37,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
-      width: deviceSize.width,
+      width: deviceWidth,
       padding: const EdgeInsets.symmetric(
           vertical: kIsWeb ? 4.0 : 24.0, horizontal: 16.0),
       child: Row(
@@ -34,7 +46,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         children: [
           InkWell(
             onTap: () => {
-              if (Navigator.canPop(context) && page != "homePage")
+              if (Navigator.canPop(context) && widget.page != "homePage")
                 {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const HomePage();
@@ -48,44 +60,83 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           //search box
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: deviceWidth > 600 ? deviceWidth * 0.2 : 8.0,
-              ),
+          Center(
+              child: Animate(
+            effects: !isIconPressed
+                ? null
+                : [
+                    SlideEffect(
+                        end: const Offset(1.5, 0.0),
+                        duration: 400.ms,
+                        curve: Curves.easeIn),
+                    FadeEffect(
+                        delay: 400.ms, begin: 1.0, end: 0.0, duration: 0.ms)
+                  ],
+            child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    isIconPressed = !isIconPressed;
+                  });
+                },
+                icon: const Icon(
+                  Icons.search,
+                  size: 30.0,
+                )),
+          )),
+          if (isIconPressed)
+            FutureBuilder(
+                future: Future.delayed(400.ms),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting ||
+                      snapshot.connectionState != ConnectionState.done) {
+                    return const SizedBox();
+                  }
+                  return Expanded(
+                    child: Container(
+                      height: 48.0,
+                      width: deviceWidth * 0.4,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: deviceWidth > 600 ? deviceWidth * 0.2 : 8.0,
+                      ),
+                      alignment: Alignment.center,
+                      // round corners
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(56.0),
+                        color: Colors.black.withOpacity(0.5),
+                      ),
 
-              //round corners
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.0),
-                //   color: Colors.grey,
-              ),
-
-              child: Card(
-                color: Color.fromARGB(255, 164, 161, 161),
-                elevation: 4.0,
-                shadowColor: Colors.black26,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextFormField(
-                    controller: _searchController,
-                    onFieldSubmitted: (value) {
-                      searchVideos(value.trim(), context);
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Search videos",
-                      suffixIcon: InkWell(
-                          onTap: () {
-                            searchVideos(
-                                _searchController.text.trim(), context);
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TextFormField(
+                          controller: _searchController,
+                          onFieldSubmitted: (value) {
+                            searchVideos(value.trim(), context);
                           },
-                          child: Icon(Icons.search)),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+                          decoration: InputDecoration(
+                            hintText: "Search videos",
+                            hintStyle: const TextStyle(color: Colors.white),
+                            suffixIcon: InkWell(
+                                onTap: () {
+                                  searchVideos(
+                                      _searchController.text.trim(), context);
+                                },
+                                child: const Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                )),
+                            // round corners
+
+                            enabledBorder: InputBorder.none,
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ).animate()
+                      ..scaleX(curve: Curves.easeOut, duration: 1500.ms)
+                          .slideX(begin: 0.5),
+                  );
+                }),
+
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.notifications_active),
@@ -94,7 +145,4 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(DeviceConstraints.appBarHeight);
 }

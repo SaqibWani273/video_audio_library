@@ -48,11 +48,13 @@ class _VideosListWidgetState extends State<VideosListWidget> {
       height: widget.height,
       currentWidget: BlocBuilder<DataBlocBloc, DataBlocState>(
         builder: (context, state) {
-          if (state is LaodedState) {
+          if (state is LaodedState || state is LoadingState) {
             return GridView.builder(
                 controller: _scrollController,
                 //  primary: true,
-                itemCount: videosList.length,
+                itemCount: state is LaodedState
+                    ? videosList.length
+                    : 10, //videosList.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   //   mainAxisSpacing: 16,
                   crossAxisSpacing: 24,
@@ -64,50 +66,12 @@ class _VideosListWidgetState extends State<VideosListWidget> {
                   childAspectRatio: 1.1,
                 ),
                 itemBuilder: (context, index) {
-                  return Container(
-                    // // alignment: Alignment.center,
-                    // margin: const EdgeInsets.only(bottom: 24.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VideoPlayerScreen(
-                                        videoDataModel: videosList[index]),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: isDesktop
-                                      ? BorderRadius.circular(16.0)
-                                      : null,
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: isDesktop
-                                      ? BorderRadius.circular(16.0)
-                                      : BorderRadius.circular(0.0),
-                                  child: NetworkImageLoader(
-                                      imageUrl: videosList[index].thumbnailUrl),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 16.0),
-                            child: Text(videosList[index].videoDescription),
-                          ),
-                        ]),
-                  );
+                  return state is LoadingState
+                      ? const LoadingWidget()
+                      : LoadedWidget(
+                          videosList: videosList,
+                          isDesktop: isDesktop,
+                          index: index);
                 });
           }
           if (state is ErrorState) {
@@ -119,8 +83,8 @@ class _VideosListWidgetState extends State<VideosListWidget> {
                       .add(LoadDataFromFirestoreApiEvent());
                 });
           }
+          //for any other state
 
-          //loading data or any other state
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
@@ -128,5 +92,89 @@ class _VideosListWidgetState extends State<VideosListWidget> {
       ),
     );
     //........
+  }
+}
+
+class LoadedWidget extends StatelessWidget {
+  const LoadedWidget({
+    super.key,
+    required this.videosList,
+    required this.isDesktop,
+    required this.index,
+  });
+
+  final List<VideoDataModel> videosList;
+  final bool isDesktop;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Expanded(
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    VideoPlayerScreen(videoDataModel: videosList[index]),
+              ),
+            );
+          },
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: isDesktop ? BorderRadius.circular(16.0) : null,
+            ),
+            child: ClipRRect(
+              borderRadius: isDesktop
+                  ? BorderRadius.circular(16.0)
+                  : BorderRadius.circular(0.0),
+              child:
+                  NetworkImageLoader(imageUrl: videosList[index].thumbnailUrl),
+            ),
+          ),
+        ),
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+        child: Text(videosList[index].videoDescription),
+      ),
+    ]);
+  }
+}
+
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: deviceWidth > 700 ? 500 : double.infinity,
+            height: 200,
+            color: const Color.fromARGB(255, 121, 118, 118),
+          ),
+          const SizedBox(height: 5),
+          Container(
+            width: deviceWidth > 700 ? 300 : deviceWidth * 0.5,
+            height: 20,
+            color: const Color.fromARGB(255, 121, 118, 118),
+          ),
+          const SizedBox(height: 5),
+          Container(
+            width: deviceWidth > 700 ? 100 : deviceWidth * 0.25,
+            height: 15,
+            color: const Color.fromARGB(255, 129, 126, 126),
+          ),
+          const SizedBox(height: 20),
+        ]);
   }
 }

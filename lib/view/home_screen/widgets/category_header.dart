@@ -53,7 +53,7 @@ class CategoryHeader extends StatelessWidget {
                           "Play all",
                           style: TextStyle(color: Colors.white),
                         ))),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Expanded(

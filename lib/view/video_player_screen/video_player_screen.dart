@@ -96,8 +96,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       },
       child: Scaffold(
         appBar: isDesktop && !isFullScreen
-            ? AppBarWidget(
-                deviceSize: MediaQuery.of(context).size, page: "videoPlayer")
+            ? const AppBarWidget(page: "videoPlayer")
             : null,
         body: YoutubePlayerScaffold(
           key: ValueKey(
@@ -134,7 +133,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         flex: 2,
                         //to do: show suggested videos based on the selected suggestion
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Suggestions(
                             currentVideoDataModel: widget.videoDataModel,
                           ),

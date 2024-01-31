@@ -1,36 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:NUHA/model/category.dart';
-import 'package:NUHA/view/common_widgets/my_scroll_widget.dart';
 import 'package:NUHA/view/common_widgets/network_image_loader.dart';
 import '../../../model/playlist.dart';
-import '../../../repository/data_repo.dart';
 import 'category_header.dart';
 
 import 'videos_list_widget.dart';
 import '../../common_widgets/appbar.dart';
 
 class CategoriesDetail extends StatelessWidget {
-  // final String playListImgUrl;
-  // final String playListName;
-  // final String playListNameInArabic;
   final Category category;
-  CategoriesDetail({
+  const CategoriesDetail({
     super.key,
-    // required this.playListImgUrl,
-    // required this.playListName,
-    // required this.playListNameInArabic,
     required this.category,
   });
-  final _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     // final playLists = context.read<DataRepo>().playLists;
 
     return Scaffold(
-      appBar: AppBarWidget(
-          deviceSize: MediaQuery.of(context).size, page: "categoryDetails"),
+      appBar: const AppBarWidget(page: "categoryDetails"),
       body: Row(children: [
         if (deviceWidth > 800)
           //playlist tilte and image and other options like youtube has

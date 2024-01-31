@@ -102,7 +102,7 @@ class _MyScrollWidgetState extends State<MyScrollWidget> {
                   defaultTargetPlatform == TargetPlatform.macOS ||
                   defaultTargetPlatform == TargetPlatform.linux ||
                   defaultTargetPlatform == TargetPlatform.windows
-              ? deviceWidth * 0.1
+              ? deviceWidth * 0.01
               : 0,
           vertical: widget.height != null ? widget.height! * 0.03 : 0,
         ),

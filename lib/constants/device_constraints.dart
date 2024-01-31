@@ -4,7 +4,7 @@ class DeviceConstraints {
   static double? deviceHeight;
 
   static double appBarHeight = kToolbarHeight + appBarPadding;
-  static double topNavBarHeight = 80;
+  static double topNavBarHeight = 65;
   static double heightMargin = 16;
   static double bottomNavBarHeight = 60;
   static double mainBodyHeight = deviceHeight! -

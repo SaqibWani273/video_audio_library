@@ -54,14 +54,16 @@ class _VideosListWidgetState extends State<VideosListWidget> {
                 //  primary: true,
                 itemCount: videosList.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //   mainAxisSpacing: 16,
+                  mainAxisSpacing: 24,
                   crossAxisSpacing: 24,
                   crossAxisCount: deviceWidth > 1100
-                      ? 3
-                      : deviceWidth > 700
-                          ? 2
-                          : 1,
-                  childAspectRatio: 1.1,
+                      ? 4
+                      : deviceWidth > 800
+                          ? 3
+                          : deviceWidth > 500
+                              ? 2
+                              : 1,
+                  childAspectRatio: 1.6,
                 ),
                 itemBuilder: (context, index) {
                   return Container(
@@ -103,7 +105,7 @@ class _VideosListWidgetState extends State<VideosListWidget> {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 16.0),
+                                horizontal: 8.0, vertical: 1.0),
                             child: Text(videosList[index].videoDescription),
                           ),
                         ]),

@@ -30,6 +30,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
+      color: Colors.black,
       width: deviceSize.width,
       padding: const EdgeInsets.symmetric(
           vertical: kIsWeb ? 4.0 : 24.0, horizontal: 16.0),
@@ -38,6 +39,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           InkWell(
+            highlightColor: Colors.white,
             onTap: () => {
               if (Navigator.canPop(context) && page != "homePage")
                 {

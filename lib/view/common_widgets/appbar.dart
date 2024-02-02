@@ -37,10 +37,14 @@ class _AppBarWidgetState extends State<AppBarWidget> {
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
-      color: Colors.black,
+      // height: DeviceConstraints.appBarHeight,
+      // color: const Color.fromARGB(255, 157, 153, 153),
       width: deviceWidth,
       padding: const EdgeInsets.symmetric(
           vertical: kIsWeb ? 4.0 : 24.0, horizontal: 16.0),
+      decoration: const BoxDecoration(
+          border:
+              Border(bottom: BorderSide(width: 3.0, style: BorderStyle.solid))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         // crossAxisAlignment: CrossAxisAlignment.center,

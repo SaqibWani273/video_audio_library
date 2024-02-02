@@ -52,7 +52,9 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             title: "NUHA",
             debugShowCheckedModeBanner: false,
-            theme: customTheme,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: ThemeMode.system,
             home: SingleChildScrollView(
               child: SizedBox(
                   height: MediaQuery.of(context).size.height,

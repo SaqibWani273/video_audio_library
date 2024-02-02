@@ -65,7 +65,7 @@ class _VideosListWidgetState extends State<VideosListWidget> {
                           : deviceWidth > 500
                               ? 2
                               : 1,
-                  childAspectRatio: 1.6,
+                  childAspectRatio: 1.4,
                 ),
                 itemBuilder: (context, index) {
                   return state is LoadingState

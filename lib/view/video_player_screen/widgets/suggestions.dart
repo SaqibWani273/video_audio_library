@@ -38,7 +38,7 @@ class _SuggestionsState extends State<Suggestions> {
     final isDesktop = defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.linux ||
         defaultTargetPlatform == TargetPlatform.windows;
-    log("devicewidth: $deviceWidth");
+
     return Column(children: [
       Expanded(
         //suggestion tagname

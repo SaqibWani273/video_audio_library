@@ -1,16 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:developer';
 
 class VideoDataModel {
   final String videoDescription;
   final String thumbnailUrl;
   final String videoUrl;
   final String category;
+  final String? subCategory;
   VideoDataModel({
     required this.videoDescription,
     required this.thumbnailUrl,
     required this.videoUrl,
     required this.category,
+    this.subCategory,
   });
 
   VideoDataModel copyWith({
@@ -18,12 +21,14 @@ class VideoDataModel {
     String? thumbnailUrl,
     String? videoUrl,
     String? category,
+    String? subCategory,
   }) {
     return VideoDataModel(
       videoDescription: videoDescription ?? this.videoDescription,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       videoUrl: videoUrl ?? this.videoUrl,
       category: category ?? this.category,
+      subCategory: subCategory ?? this.subCategory,
     );
   }
 
@@ -33,6 +38,7 @@ class VideoDataModel {
       'thumbnailUrl': thumbnailUrl,
       'videoUrl': videoUrl,
       'category': category,
+      'subCategory': subCategory
     };
   }
 
@@ -42,6 +48,7 @@ class VideoDataModel {
       thumbnailUrl: map['thumbnailUrl']["stringValue"] as String,
       videoUrl: map['videoUrl']["stringValue"] as String,
       category: map['category']["stringValue"] as String,
+      subCategory: map['subCategory']["stringValue"] as String?,
     );
   }
 

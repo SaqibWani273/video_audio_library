@@ -15,7 +15,7 @@ class CategoriesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categories = context.read<DataRepo>().categories;
-    log(categories.toString());
+
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
         alignment: Alignment.center,

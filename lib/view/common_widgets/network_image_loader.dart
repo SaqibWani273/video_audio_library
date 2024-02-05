@@ -1,29 +1,31 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class NetworkImageLoader extends StatelessWidget {
   final String imageUrl;
-  const NetworkImageLoader({super.key, required this.imageUrl});
+  final double? height;
+  const NetworkImageLoader({super.key, required this.imageUrl, this.height});
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      imageUrl,
-      fit: BoxFit.fill,
-      loadingBuilder: (context, child, progress) {
-        return progress == null
-            ? child
-            : Stack(children: [
-                Container(
-                  color: Colors.grey.shade200,
-                ),
-                const Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: LinearProgressIndicator(),
-                ),
-              ]);
-      },
-    );
+    return CachedNetworkImage(
+        imageUrl: imageUrl,
+        height: height,
+        placeholder: (context, url) {
+          // return const Center(child: CircularProgressIndicator());
+
+          return Stack(children: [
+            Container(height: height, color: Colors.black.withOpacity(0.4)),
+            const Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: LinearProgressIndicator(),
+            ),
+          ]);
+        },
+        errorWidget: (context, url, error) {
+          return const Icon(Icons.error);
+        });
   }
 }

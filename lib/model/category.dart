@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:NUHA/model/playlist.dart';
 
@@ -7,7 +8,7 @@ class Category {
   String nameInEnglish;
   String nameInArabic;
   String imgUrl;
-  List<PlayList> playLists;
+  List<PlayList>? playLists;
 
   Category({
     required this.nameInEnglish,
@@ -30,11 +31,13 @@ class Category {
       nameInEnglish: map['nameInEnglish']["stringValue"] as String,
       nameInArabic: map['nameInArabic']["stringValue"] as String,
       imgUrl: map['imageUrl']["stringValue"] as String,
-      // playLists: List<PlayList>.from(
-      //   (map['playLists'] as List<int>).map<PlayList>(
-      //     (x) => PlayList.fromMap(x as Map<String, dynamic>),
-      //   ),
-      // ),
+      playLists:
+          map.containsKey('subcategories') && map['subcategories'] != null
+              ? List<Map<String, dynamic>>.from(
+                      map['subcategories']['arrayValue']['values'])
+                  .map((e) => PlayList.fromMap(e))
+                  .toList()
+              : null,
     );
   }
 

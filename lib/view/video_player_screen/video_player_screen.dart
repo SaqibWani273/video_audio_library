@@ -57,7 +57,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         //to stop showing loading indicator when video started playing
         if (mounted) {
           setState(() {
-            log("setstate called");
             isLoaded = true;
           });
         }
@@ -71,7 +70,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void dispose() {
-    log("disposed video player screen");
     // _controller.stopVideo();
     //_controller.close();//shows some warnings in console
     super.dispose();
@@ -83,7 +81,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         defaultTargetPlatform == TargetPlatform.linux ||
         defaultTargetPlatform == TargetPlatform.windows;
     final deviceWidth = MediaQuery.of(context).size.width;
-    log(" device width : $deviceWidth");
+
     return VisibilityDetector(
       key: ValueKey(UniqueKey()),
       onVisibilityChanged: (visibilityInfo) {

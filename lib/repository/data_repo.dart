@@ -45,56 +45,40 @@ class DataRepo {
         throw CustomException(
             type: ExceptionType.network, message: " Network Error !");
       }
-      // log(" loadCategories -> ${response.body}");
-      // var i = 0;
-      for (var category in jsonDecode(response.body)["documents"]) {
-        log("data -> ${category["fields"]["nameInEnglish"]["stringValue"]}");
-        var tempCategory = Category.fromMap(category["fields"]);
-        tempCategory = tempCategory.copyWith(playLists: [
-          PlayList(
-              nameInEnglish: "ALL",
-              nameInArabic: " الكل ",
-              videos: videoDataModelList
-                  .where((element) =>
-                      element.category ==
-                      category["fields"]["nameInEnglish"]["stringValue"])
-                  .toList()),
-        ]);
 
-        categories.add(tempCategory);
-        // categories
-        //     .add(
-        //       Category.fromMap(category["fields"]).copyWith(playLists: [
-        //   PlayList(
-        //       nameInEnglish: "ALL",
-        //       nameInArabic: " الكل ",
-        //       videos: videoDataModelList
-        //           .where((element) =>
-        //               element.category ==
-        //               category["fields"]["nameInEnglish"]["stringValue"])
-        //           .toList()),
-        // ]));
-
-        //to do : change it late, temp solution
-        // playLists.add(PlayList.fromMap(category["fields"]));
-        // playLists[i] = playLists[i].copyWith(
-        //   videos: videoDataModelList
-        //       .where(
-        //           (element) => element.category == playLists[i].nameInEnglish)
-        //       .toList(),
-        // );
-        // i++;
+      for (var categoryData in jsonDecode(response.body)["documents"]) {
+        final PlayList allVideos = PlayList(
+            nameInEnglish: "ALL VIDEOS",
+            nameInArabic: " الكل ",
+            videos: videoDataModelList
+                .where((element) =>
+                    element.category ==
+                    categoryData["fields"]["nameInEnglish"]["stringValue"])
+                .toList());
+        //gets category & their playlists data but without videos
+        //data for playlists
+        var category = Category.fromMap(categoryData["fields"]);
+        final updatedPlaylist = category.playLists
+            ?.map((e) => e.copyWith(
+                videos: videoDataModelList
+                    .where((element) =>
+                        element.subCategory == e.nameInEnglish &&
+                        element.category == category.nameInEnglish)
+                    .toList()))
+            .toList();
+        // log("updated  playlist -> $updatedPlaylist");
+        category = category.copyWith(
+            playLists: updatedPlaylist == null
+                ? [allVideos]
+                : (updatedPlaylist..insert(0, allVideos)));
+        categories.add(category);
       }
 
-      //suggestions while video is plaing
       suggestionTagNames = [
         // "recommended",// add it later
         "all",
 
         ...categories.map((e) => e.nameInEnglish).toList()
-        // CategoriesEnum.values.map(
-        //   (e) => e.name,
-        // )
       ];
     } on http.ClientException catch (_) {
       throw CustomException(

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:NUHA/model/video_data_model.dart';
 
@@ -40,11 +41,21 @@ class PlayList {
   }
 
   factory PlayList.fromMap(Map<String, dynamic> map) {
+    /* map is somewhat like this
+    {mapValue: {fields: {imageUrl:
+     {stringValue: https://firebasestorage.googleapis.com/v0/b/video-audio-library.appspot.com/
+     o/subcategories%2FjvTtmwCnFgSMunfXi8KjTGLDz2r1%2F1706802822316.png?alt=media&token=07f458f5
+     -c4ff-47ea-afce-d73e8690b435},
+     nameInArabic: {stringValue: }, nameInEnglish: {stringValue: Tafseer Surah Fatihah}}}}
+
+    */
     return PlayList(
-      nameInEnglish: map['nameInEnglish']["stringValue"] as String,
-      nameInArabic: map['nameInArabic']["stringValue"] as String,
-      imageUrl: map['imageUrl'] != null
-          ? map['imageUrl']["stringValue"] as String
+      nameInEnglish:
+          map['mapValue']['fields']['nameInEnglish']["stringValue"] as String,
+      nameInArabic:
+          map['mapValue']['fields']['nameInArabic']["stringValue"] as String,
+      imageUrl: map['mapValue']['fields']['imageUrl'] != null
+          ? map['mapValue']['fields']['imageUrl']["stringValue"] as String
           : null,
       // videos: List<VideoDataModel>.from(
       //   (map['videos'] as List<int>).map<VideoDataModel>(

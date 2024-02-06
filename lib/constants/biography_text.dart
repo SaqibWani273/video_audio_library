@@ -20,6 +20,6 @@ Map<String, String> getBiography() {
     "education":
         "${Biography.education}\n${Biography.afterEducationText}\n${Biography.teachersOfSheikh}",
     "teachings": Biography.teachings,
-    "Compiled by": "Centre for Quraan And Sunnah, Bangalore.",
+    "Compiled by": "NOOR UL HASAN ACADEMY.",
   };
 }

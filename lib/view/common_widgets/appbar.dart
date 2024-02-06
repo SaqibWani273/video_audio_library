@@ -38,19 +38,21 @@ class _AppBarWidgetState extends State<AppBarWidget> {
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
       // height: DeviceConstraints.appBarHeight,
+      // alignment: Alignment.bottomCenter,
       // color: const Color.fromARGB(255, 157, 153, 153),
       width: deviceWidth,
-      padding: const EdgeInsets.symmetric(
-          vertical: kIsWeb ? 4.0 : 24.0, horizontal: 16.0),
+      padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+      //  const EdgeInsets.symmetric(
+      //     vertical: kIsWeb ? 4.0 : 24.0, horizontal: 16.0),
       decoration: const BoxDecoration(
+          // color: Colors.amber,
           border:
               Border(bottom: BorderSide(width: 3.0, style: BorderStyle.solid))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           InkWell(
-            highlightColor: Colors.white,
+            // highlightColor: Colors.white,
             onTap: () => {
               if (Navigator.canPop(context) && widget.page != "homePage")
                 {
@@ -61,34 +63,51 @@ class _AppBarWidgetState extends State<AppBarWidget> {
             },
             child: Image.asset(
               'assets/images/demo_icon_video_library.png',
-              height: 40,
+              height: 50,
               width: 80,
             ),
           ),
+          const Spacer(),
+          deviceWidth > 500.0
+              ? const Text(
+                  "NOOR UL HASAN ACADEMY",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : const Text(""),
+          const Spacer(),
           //search box
-          Center(
+          Container(
+              padding: const EdgeInsets.only(right: 10.0),
               child: Animate(
-            effects: !isIconPressed
-                ? null
-                : [
-                    SlideEffect(
-                        end: const Offset(1.5, 0.0),
-                        duration: 400.ms,
-                        curve: Curves.easeIn),
-                    FadeEffect(
-                        delay: 400.ms, begin: 1.0, end: 0.0, duration: 0.ms)
-                  ],
-            child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    isIconPressed = !isIconPressed;
-                  });
-                },
-                icon: const Icon(
-                  Icons.search,
-                  size: 30.0,
-                )),
-          )),
+                effects: !isIconPressed
+                    ? null
+                    : [
+                        SlideEffect(
+                            end: const Offset(1.5, 0.0),
+                            duration: 400.ms,
+                            curve: Curves.easeIn),
+                        FadeEffect(
+                            delay: 400.ms, begin: 1.0, end: 0.0, duration: 0.ms)
+                      ],
+                child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isIconPressed = !isIconPressed;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.search,
+                      size: 30.0,
+                    )),
+              )),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notifications_active),
+          ),
+
           if (isIconPressed)
             FutureBuilder(
                 future: Future.delayed(400.ms),
@@ -142,11 +161,6 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                           .slideX(begin: 0.5),
                   );
                 }),
-
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_active),
-          )
         ],
       ),
     );

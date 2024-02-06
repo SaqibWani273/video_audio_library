@@ -21,145 +21,216 @@ class _HomePageState extends State<HomePage> {
   var currentNavBarIndex = 0;
   var currentBottomNavBarIndex = 0;
 
-  final ScrollController _scrollController = ScrollController();
-  bool _isAppBarVisible = true;
-
   @override
   void initState() {
     super.initState();
-    print("message.......");
-
-    // Listen to scroll events
-    _scrollController.addListener(() {
-      if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        // Scroll direction is up, show app bar
-        if (!_isAppBarVisible) {
-          setState(() {
-            _isAppBarVisible = true;
-          });
-        }
-      } else if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        // Scroll direction is down, hide app bar
-        if (_isAppBarVisible) {
-          setState(() {
-            _isAppBarVisible = false;
-          });
-        }
-      }
-    });
   }
 
-  final List<Widget> mainBodyWidgets = <Widget>[
-    const VideosListWidget(),
-    const CategoriesWidget(),
-    const Center(
-      child: Text("Recommended Videos will appear here soon !"),
-    ), //recommended videos
-  ];
+  // final List<Widget> mainBodyWidgets = <Widget>[
+  //   const VideosListWidget(),
+  //   const CategoriesWidget(),
+  //   const Center(
+  //     child: Text("Recommended Videos will appear here soon !"),
+  //   ), //recommended videos
+  // ];
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData mode = Theme.of(context);
-    final deviceSize = MediaQuery.of(context).size;
-    DeviceConstraints.deviceHeight = deviceSize.height;
-    return Scaffold(
-      extendBody: true,
-      appBar: currentBottomNavBarIndex == 0
-          ? _isAppBarVisible
-              ? const AppBarWidget(page: "homePage")
-              : null
-          : null,
-      body: currentBottomNavBarIndex == 0
-          ? Column(children: [
-              //topNavbar
-              SizedBox(
-                height: DeviceConstraints.topNavBarHeight,
-                child: Row(
-                  children: topNavItems
-                      .map(
-                        (e) => Expanded(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(24),
-                            onTap: () {
-                              setState(() {
-                                currentNavBarIndex = topNavItems.indexOf(e);
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Column(
-                                children: [
-                                  Icon(e.icon),
-                                  Text(e.title),
-                                  if (currentNavBarIndex ==
-                                      topNavItems.indexOf(e))
-                                    Container(
-                                      height: 4,
-                                      width: 24,
-                                      margin: const EdgeInsets.only(top: 5.0),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            mode.brightness == Brightness.light
-                                                ? Colors.black
-                                                : Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
+    ThemeData mode = Theme.of(context);
+    return DefaultTabController(
+      length: 3,
+      child: SafeArea(
+        child: Scaffold(
+          body: const TabBarView(
+              children: [VideosListWidget(), AudioScreen(), BiographyScreen()]),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: mode.brightness == Brightness.dark
+                  ? DeviceConstraints.darkHeader
+                  : DeviceConstraints.lightHeader,
+            ),
+            height: DeviceConstraints.bottomNavBarHeight,
+            child: TabBar(
+              tabs: const [
+                Tab(
+                  icon: Icon(Icons.video_settings),
+                  text: "VIDEO",
                 ),
-              ),
-              SizedBox(
-                height: DeviceConstraints.heightMargin,
-              ),
-              Expanded(child: mainBodyWidgets[currentNavBarIndex]),
-            ])
-          : currentBottomNavBarIndex == 1
-              ? const AudioScreen()
-              : const BiographyScreen(),
-      bottomNavigationBar: NavigationBar(
-        height: DeviceConstraints.bottomNavBarHeight,
-        selectedIndex: currentBottomNavBarIndex,
-        onDestinationSelected: (int index) {
-          log("index = $index");
-          if (index == 1) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Center(child: Text("Coming Soon ...")),
-            ));
-          }
-          setState(() {
-            currentBottomNavBarIndex = index;
-          });
-        },
-        destinations: bottomNavItems
-            .map((e) =>
-                NavigationDestination(icon: Icon(e.icon), label: e.title))
-            .toList(),
+                Tab(
+                  icon: Icon(Icons.audio_file_outlined),
+                  text: "AUDIO",
+                ),
+                Tab(
+                  icon: Icon(Icons.person),
+                  text: "BIOGRAPHY",
+                )
+              ],
+              labelStyle: TextStyle(
+                  // color: Colors.red,
+                  color: mode.brightness == Brightness.dark
+                      ? DeviceConstraints.darkText
+                      : DeviceConstraints.lightText,
+                  fontWeight: FontWeight.w300),
+            ),
+          ),
+        ),
       ),
     );
   }
 }
 
-class NavBar {
-  String title;
-  IconData icon;
-  NavBar({required this.title, required this.icon});
-}
+// class NavBar {
+//   String title;
+//   IconData icon;
+//   NavBar({required this.title, required this.icon});
+// }
 
-final List<NavBar> topNavItems = <NavBar>[
-  NavBar(title: 'ALL', icon: Icons.video_settings),
-  NavBar(title: 'Categories', icon: Icons.category),
-  NavBar(title: 'Recommended', icon: Icons.lightbulb_outlined),
-];
-final List<NavBar> bottomNavItems = <NavBar>[
-  NavBar(title: 'VIDEOS', icon: Icons.video_settings),
-  NavBar(title: 'AUDIOS', icon: Icons.audio_file_outlined),
-  NavBar(title: 'BIOGRAPHY', icon: Icons.person),
-];
+// final List<NavBar> topNavItems = <NavBar>[
+//   NavBar(title: 'ALL', icon: Icons.video_settings),
+//   NavBar(title: 'Categories', icon: Icons.category),
+//   NavBar(title: 'Recommended', icon: Icons.lightbulb_outlined),
+// ];
+// final List<NavBar> bottomNavItems = <NavBar>[
+//   NavBar(title: 'VIDEOS', icon: Icons.video_settings),
+//   NavBar(title: 'AUDIOS', icon: Icons.audio_file_outlined),
+//   NavBar(title: 'BIOGRAPHY', icon: Icons.person),
+// ];
+
+
+
+
+
+          // currentBottomNavBarIndex == 0
+          //     ? const VideosListWidget()
+          // NestedScrollView(
+          //     floatHeaderSlivers: true,
+          //     headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          //           SliverAppBar(
+          //             backgroundColor: mode.scaffoldBackgroundColor,
+          //             iconTheme: mode.iconTheme,
+          //             pinned: true,
+          //             floating: true,
+          //             title: const AppBarWidget(page: "homePage"),
+          //             bottom: TabBar(
+          //                 labelStyle: TextStyle(
+          //                     color: mode.brightness == Brightness.light
+          //                         ? Colors.black
+          //                         : Colors.white,
+          //                     fontSize: 11,
+          //                     fontWeight: FontWeight.bold),
+          //                 tabs: const [
+          //                   Tab(
+          //                     icon: Icon(Icons.video_settings),
+          //                     text: "ALL",
+          //                   ),
+          //                   Tab(
+          //                     icon: Icon(Icons.category),
+          //                     text: "CATEGORIES",
+          //                   ),
+          //                   Tab(
+          //                     icon: Icon(Icons.lightbulb_outlined),
+          //                     text: "RECOMMENDED",
+          //                   ),
+          //                 ]),
+          //           )
+          //         ],
+          //     body: TabBarView(children: [
+          //       mainBodyWidgets[0],
+          //       mainBodyWidgets[1],
+          //       mainBodyWidgets[2]
+          //     ]))
+          // : currentBottomNavBarIndex == 1
+          //     ? const AudioScreen()
+          // NestedScrollView(
+          //     floatHeaderSlivers: true,
+          //     headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          //           const SliverAppBar(
+          //             title: Text("Audio Screen App Bar"),
+          //           )
+          //         ],
+          //     body: const TabBarView(children: [AudioScreen()]))
+          // : const BiographyScreen(),
+          // NestedScrollView(
+          //     headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          //           const SliverAppBar(
+          //             title: Text("Biography Screen App Bar"),
+          //           )
+          //         ],
+          //     body: const TabBarView(children: [BiographyScreen()])),
+
+
+// BottomNavigationBar(
+//   onTap: (index) {
+//     setState(() {
+//       currentBottomNavBarIndex = index;
+//     });
+//   },
+//   items: const [
+//     BottomNavigationBarItem(
+//         icon: Icon(Icons.video_settings), label: 'VIDEO'),
+//     BottomNavigationBarItem(
+//         icon: Icon(Icons.audio_file_outlined), label: 'AUDIO'),
+//     BottomNavigationBarItem(
+//         icon: Icon(Icons.person), label: 'BIOGRAPHY'),
+//   ],
+//   unselectedLabelStyle: TextStyle(
+//       color: mode.brightness == Brightness.light
+//           ? Colors.black
+//           : Colors.white,
+//       fontSize: 11,
+//       fontWeight: FontWeight.bold),
+//   selectedLabelStyle: TextStyle(
+//       color: mode.brightness == Brightness.light
+//           ? Colors.black
+//           : Colors.white,
+//       fontSize: 13,
+//       fontWeight: FontWeight.bold),
+// )
+
+
+          // BottomNavigationBar(
+          //   onTap: (index) {
+          //     setState(() {
+          //       currentBottomNavBarIndex = index;
+          //     });
+          //   },
+          //   items: const [
+          //     BottomNavigationBarItem(
+          //         icon: Icon(Icons.video_settings), label: 'VIDEO'),
+          //     BottomNavigationBarItem(
+          //         icon: Icon(Icons.audio_file_outlined), label: 'AUDIO'),
+          //     BottomNavigationBarItem(
+          //         icon: Icon(Icons.person), label: 'BIOGRAPHY'),
+          //   ],
+          // unselectedLabelStyle: TextStyle(
+          //     color: mode.brightness == Brightness.light
+          //         ? Colors.black
+          //         : Colors.white,
+          //     fontSize: 11,
+          //     fontWeight: FontWeight.bold),
+          // selectedLabelStyle: TextStyle(
+          //     color: mode.brightness == Brightness.light
+          //         ? Colors.black
+          //         : Colors.white,
+          //     fontSize: 13,
+          //     fontWeight: FontWeight.bold),
+          // ),
+          // NavigationBar(
+          //   height: DeviceConstraints.bottomNavBarHeight,
+          //   selectedIndex: currentBottomNavBarIndex,
+          //   onDestinationSelected: (int index) {
+          //     log("index = $index");
+          //     if (index == 1) {
+          //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          //         content: Center(child: Text("Coming Soon ...")),
+          //       ));
+          //     }
+          //     setState(() {
+          //       currentBottomNavBarIndex = index;
+          //     });
+          //   },
+          //   destinations: bottomNavItems
+          //       .map((e) =>
+          //           NavigationDestination(icon: Icon(e.icon), label: e.title))
+          //       .toList(),
+          // ),

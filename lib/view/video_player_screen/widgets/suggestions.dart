@@ -21,7 +21,7 @@ class Suggestions extends StatefulWidget {
 
 class _SuggestionsState extends State<Suggestions> {
   late DataRepo dataRepo;
-  final ScrollController scrollController = ScrollController();
+  // final ScrollController scrollController = ScrollController();
   int currentIndex = 0;
   @override
   void initState() {

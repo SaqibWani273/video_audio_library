@@ -1,3 +1,4 @@
+import 'package:NUHA/constants/device_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,14 +22,16 @@ final lightTheme = ThemeData(
             labelSmall: const TextStyle(fontWeight: FontWeight.w600),
           )),
   useMaterial3: false,
-  // brightness: Brightness.light,
-  scaffoldBackgroundColor: const Color.fromARGB(255, 153, 157, 159),
+  brightness: Brightness.light,
+  scaffoldBackgroundColor: DeviceConstraints.whiteBackground,
+  // bottomNavigationBarTheme:
+  // const BottomNavigationBarThemeData(selectedItemColor: Colors.black)
 );
 
 final darkTheme = ThemeData(
   // fontFamily:GoogleFonts.openSansCondensed().fontFamily,
   textTheme: GoogleFonts.openSansCondensedTextTheme(
-      ThemeData.light().textTheme.copyWith(
+      ThemeData.dark().textTheme.copyWith(
             bodyLarge: const TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -46,5 +49,5 @@ final darkTheme = ThemeData(
           )),
   useMaterial3: false,
   brightness: Brightness.dark,
-  // scaffoldBackgroundColor: const Color.fromARGB(255, 209, 213, 215),
+  scaffoldBackgroundColor: DeviceConstraints.blackBackground,
 );

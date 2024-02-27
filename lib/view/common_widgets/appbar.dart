@@ -41,32 +41,39 @@ class _AppBarWidgetState extends State<AppBarWidget> {
       // alignment: Alignment.bottomCenter,
       // color: const Color.fromARGB(255, 157, 153, 153),
       width: deviceWidth,
-      padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+      padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0),
       //  const EdgeInsets.symmetric(
       //     vertical: kIsWeb ? 4.0 : 24.0, horizontal: 16.0),
-      decoration: const BoxDecoration(
-          // color: Colors.amber,
-          border:
-              Border(bottom: BorderSide(width: 3.0, style: BorderStyle.solid))),
+      // decoration: const BoxDecoration(
+      //     border:
+      //         Border(bottom: BorderSide(width: 3.0, style: BorderStyle.solid))),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           InkWell(
-            // highlightColor: Colors.white,
-            onTap: () => {
-              if (Navigator.canPop(context) && widget.page != "homePage")
-                {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const HomePage();
-                  }))
-                }
-            },
-            child: Image.asset(
-              'assets/images/demo_icon_video_library.png',
-              height: 50,
-              width: 80,
-            ),
-          ),
+              // highlightColor: Colors.white,
+              onTap: () => {
+                    if (Navigator.canPop(context) && widget.page != "homePage")
+                      {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const HomePage();
+                        }))
+                      }
+                  },
+              child: const Text(
+                'NUHA LOGO',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              )
+              //  Image.asset(
+              //   'assets/images/demo_icon_video_library.png',
+              //   height: 50,
+              //   width: 80,
+              // ),
+              ),
           const Spacer(),
           deviceWidth > 500.0
               ? const Text(
@@ -80,7 +87,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
           const Spacer(),
           //search box
           Container(
-              padding: const EdgeInsets.only(right: 10.0),
+              padding: const EdgeInsets.only(right: 0.0),
               child: Animate(
                 effects: !isIconPressed
                     ? null

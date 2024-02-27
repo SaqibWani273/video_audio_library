@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:NUHA/view/common_widgets/error_screen.dart';
 import 'package:NUHA/view/common_widgets/my_scroll_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../model/video_data_model.dart';
 import '../../../repository/data_repo.dart';
@@ -15,13 +16,13 @@ import '../../common_widgets/network_image_loader.dart';
 
 class VideosListWidget extends StatefulWidget {
   //this will be passed from playlist page & not from home page
-  final double? height;
-  final List<VideoDataModel>? videosList;
+  // final double? height;
+  // final List<VideoDataModel>? videosList;
 
   const VideosListWidget({
     super.key,
-    this.videosList,
-    this.height,
+    // this.videosList,
+    // this.height,
   });
 
   @override
@@ -29,14 +30,14 @@ class VideosListWidget extends StatefulWidget {
 }
 
 class _VideosListWidgetState extends State<VideosListWidget> {
-  late final List<VideoDataModel> videosList;
+  // late final List<VideoDataModel> videosList;
   // final ScrollController _scrollController = ScrollController();
-  @override
-  void initState() {
-    videosList =
-        widget.videosList ?? context.read<DataRepo>().videoDataModelList;
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   videosList =
+  //       widget.videosList ?? context.read<DataRepo>().videoDataModelList;
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,27 +59,26 @@ class _VideosListWidgetState extends State<VideosListWidget> {
               floating: true,
               pinned: true,
               bottom: TabBar(
-                // indicatorColor: Colors.transparent,
-                tabs: const [
-                  Tab(
-                    icon: Icon(Icons.video_settings),
-                    text: "ALL",
-                  ),
-                  Tab(
-                    icon: Icon(Icons.category),
-                    text: "CATEGORIES",
-                  ),
-                  Tab(
-                    icon: Icon(Icons.lightbulb_outlined),
-                    text: "RECOMMENDED",
-                  )
-                ],
-                labelStyle: TextStyle(
-                    color: mode.brightness == Brightness.dark
-                        ? DeviceConstraints.darkText
-                        : DeviceConstraints.lightText,
-                    fontWeight: FontWeight.w300),
-              ),
+                  labelPadding: const EdgeInsets.only(right: 5.0),
+                  tabs: const [
+                    Tab(
+                      icon: Icon(Icons.video_settings),
+                      text: "All",
+                    ),
+                    Tab(
+                      icon: Icon(Icons.category),
+                      text: "Category",
+                    ),
+                    Tab(
+                      icon: Icon(Icons.lightbulb_outlined),
+                      text: "Recommended",
+                    )
+                  ],
+                  labelStyle: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w600,
+                      color: mode.brightness == Brightness.dark
+                          ? DeviceConstraints.darkText
+                          : DeviceConstraints.lightText)),
             )
           ],
           body: const TabBarView(children: [
@@ -217,11 +217,17 @@ class LoadedWidget extends StatelessWidget {
         ),
       ),
       const SizedBox(
-        height: 10,
+        height: 5,
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-        child: Text(videosList[index].videoDescription),
+        child: Tooltip(
+          message: videosList[index].videoDescription,
+          child: Text(
+            videosList[index].videoDescription,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ),
     ]);
   }

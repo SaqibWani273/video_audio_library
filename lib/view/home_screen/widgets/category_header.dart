@@ -1,3 +1,4 @@
+import 'package:NUHA/constants/device_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:NUHA/view/common_widgets/network_image_loader.dart';
 
@@ -14,13 +15,16 @@ class CategoryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData mode = Theme.of(context);
     return Container(
         height: 200,
         margin: const EdgeInsets.all(16.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
-          color: Colors.grey.shade200,
+          color: mode.brightness == Brightness.dark
+              ? DeviceConstraints.darkHeader
+              : DeviceConstraints.lightHeader,
         ),
         child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,

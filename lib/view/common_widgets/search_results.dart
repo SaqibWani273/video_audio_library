@@ -26,7 +26,7 @@ class _SearchResultsState extends State<SearchResults> {
                 height: MediaQuery.of(context).size.height,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: VideosListWidget(
+                  child: MyBlockBuilder(
                     videosList: widget.searchResults,
                   ),
                 ),

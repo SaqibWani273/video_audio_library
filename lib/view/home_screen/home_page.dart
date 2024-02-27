@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:NUHA/view/biography/biography_screen.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '/constants/device_constraints.dart';
 import '../audio_screen.dart';
 import 'widgets/videos_list_widget.dart';
@@ -51,27 +52,25 @@ class _HomePageState extends State<HomePage> {
             ),
             height: DeviceConstraints.bottomNavBarHeight,
             child: TabBar(
-              tabs: const [
-                Tab(
-                  icon: Icon(Icons.video_settings),
-                  text: "VIDEO",
-                ),
-                Tab(
-                  icon: Icon(Icons.audio_file_outlined),
-                  text: "AUDIO",
-                ),
-                Tab(
-                  icon: Icon(Icons.person),
-                  text: "BIOGRAPHY",
-                )
-              ],
-              labelStyle: TextStyle(
-                  // color: Colors.red,
-                  color: mode.brightness == Brightness.dark
-                      ? DeviceConstraints.darkText
-                      : DeviceConstraints.lightText,
-                  fontWeight: FontWeight.w300),
-            ),
+                tabs: const [
+                  Tab(
+                    icon: Icon(Icons.video_settings),
+                    text: "VIDEO",
+                  ),
+                  Tab(
+                    icon: Icon(Icons.audio_file_outlined),
+                    text: "AUDIO",
+                  ),
+                  Tab(
+                    icon: Icon(Icons.person),
+                    text: "BIOGRAPHY",
+                  )
+                ],
+                labelStyle: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w600,
+                    color: mode.brightness == Brightness.dark
+                        ? DeviceConstraints.darkText
+                        : DeviceConstraints.lightText)),
           ),
         ),
       ),

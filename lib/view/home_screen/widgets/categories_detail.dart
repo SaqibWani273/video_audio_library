@@ -1,3 +1,4 @@
+import 'package:NUHA/constants/device_constraints.dart';
 import 'package:NUHA/model/video_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:NUHA/model/category.dart';
@@ -18,6 +19,7 @@ class CategoriesDetail extends StatelessWidget {
   late List<VideoDataModel>? defaultVideosList;
   @override
   Widget build(BuildContext context) {
+    ThemeData mode = Theme.of(context);
     final deviceWidth = MediaQuery.of(context).size.width;
     // final playLists = context.read<DataRepo>().playLists;
 
@@ -46,7 +48,7 @@ class CategoriesDetail extends StatelessWidget {
               ...category.playLists!.map((PlayList playList) {
                 if (playList.nameInEnglish == 'Default') {
                   defaultVideosList = playList.videos;
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
                 return Container(
                   margin: const EdgeInsets.all(16.0),
@@ -60,7 +62,7 @@ class CategoriesDetail extends StatelessWidget {
                                     playList.videos!.isEmpty
                                 ? const Center(
                                     child: Text("No Videos Added  Yet "))
-                                : VideosListWidget(
+                                : MyBlockBuilder(
                                     videosList: playList.videos,
                                     height: MediaQuery.of(context).size.height,
                                   ),
@@ -119,7 +121,11 @@ class CategoriesDetail extends StatelessWidget {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
-                                        ?.copyWith(color: Colors.white),
+                                        ?.copyWith(
+                                            color: mode.brightness ==
+                                                    Brightness.dark
+                                                ? DeviceConstraints.darkText
+                                                : DeviceConstraints.lightText),
                                   ),
                                 )),
                           ]),
@@ -146,7 +152,12 @@ class CategoriesDetail extends StatelessWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(color: Colors.black54),
+                                          ?.copyWith(
+                                              color: mode.brightness ==
+                                                      Brightness.dark
+                                                  ? DeviceConstraints.darkText
+                                                  : DeviceConstraints
+                                                      .lightText),
                                     )
                                   ]),
                             ))

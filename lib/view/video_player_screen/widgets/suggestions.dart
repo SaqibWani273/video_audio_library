@@ -46,49 +46,50 @@ class _SuggestionsState extends State<Suggestions> {
         child: SizedBox(
           child: Stack(
             children: [
-              SingleChildScrollView(
-                primary: true,
-                scrollDirection: Axis.horizontal,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: Row(
-                      children: dataRepo.suggestionTagNames
-                          .asMap()
-                          .entries
-                          .map((entry) => InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    currentIndex = entry.key;
-                                  });
-                                  context.read<SuggestedVideosBloc>().add(
-                                      LoadSuggestedVideosEvent(
-                                          suggestionTagName: entry.value));
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.all(8.0),
-                                  padding: const EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0),
+              // SingleChildScrollView(
+              //   primary: true,
+              //   scrollDirection: Axis.horizontal,
+              //   child:
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Row(
+                    children: dataRepo.suggestionTagNames
+                        .asMap()
+                        .entries
+                        .map((entry) => InkWell(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = entry.key;
+                                });
+                                context.read<SuggestedVideosBloc>().add(
+                                    LoadSuggestedVideosEvent(
+                                        suggestionTagName: entry.value));
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: currentIndex == entry.key
+                                      ? Colors.black
+                                      : Colors.grey.shade200,
+                                ),
+                                child: Text(
+                                  entry.value.toUpperCase(),
+                                  style: TextStyle(
                                     color: currentIndex == entry.key
-                                        ? Colors.black
-                                        : Colors.grey.shade200,
-                                  ),
-                                  child: Text(
-                                    entry.value.toUpperCase(),
-                                    style: TextStyle(
-                                      color: currentIndex == entry.key
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
                                 ),
-                              ))
-                          .toList(),
-                    ),
+                              ),
+                            ))
+                        .toList(),
                   ),
                 ),
               ),
+              // ),
               Positioned(
                   right: 0,
                   top: 0,
@@ -112,7 +113,7 @@ class _SuggestionsState extends State<Suggestions> {
             child: isDesktop
                 ? DesktopSuggestions(
                     suggestedVideos: dataRepo.suggestedVideosList)
-                : VideosListWidget(
+                : MyBlockBuilder(
                     videosList: dataRepo.suggestedVideosList,
                   ),
 

@@ -4,22 +4,28 @@ import 'package:google_fonts/google_fonts.dart';
 
 final lightTheme = ThemeData(
   // fontFamily:GoogleFonts.openSansCondensed().fontFamily,
-  textTheme: GoogleFonts.openSansCondensedTextTheme(
-      ThemeData.light().textTheme.copyWith(
-            bodyLarge: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-            bodyMedium:
-                const TextStyle(fontWeight: FontWeight.w600, wordSpacing: 4.0),
-            bodySmall: const TextStyle(fontWeight: FontWeight.w600),
+  textTheme:
+      GoogleFonts.montserratTextTheme(ThemeData.light().textTheme.copyWith(
+            bodyLarge: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w600, fontSize: 16),
+            // const TextStyle(
+            //   color: Colors.black,
+            //   fontSize: 16,
+            //   fontWeight: FontWeight.bold,
+            // ),
+            bodyMedium: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w600, wordSpacing: 4.0),
+            // const TextStyle(fontWeight: FontWeight.w600, wordSpacing: 4.0),
+            bodySmall: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+            // const TextStyle(fontWeight: FontWeight.w600),
 
             //for search field in appbar
-            titleMedium: const TextStyle(fontWeight: FontWeight.w600),
+            titleMedium: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+            // const TextStyle(fontWeight: FontWeight.w600),
 
             //for bottom nav
-            labelSmall: const TextStyle(fontWeight: FontWeight.w600),
+            labelSmall: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+            // const TextStyle(fontWeight: FontWeight.w600),
           )),
   useMaterial3: false,
   brightness: Brightness.light,
@@ -30,22 +36,28 @@ final lightTheme = ThemeData(
 
 final darkTheme = ThemeData(
   // fontFamily:GoogleFonts.openSansCondensed().fontFamily,
-  textTheme: GoogleFonts.openSansCondensedTextTheme(
-      ThemeData.dark().textTheme.copyWith(
-            bodyLarge: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-            bodyMedium:
-                const TextStyle(fontWeight: FontWeight.w600, wordSpacing: 4.0),
-            bodySmall: const TextStyle(fontWeight: FontWeight.w600),
+  textTheme:
+      GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme.copyWith(
+            bodyLarge: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w600, fontSize: 16),
+            // TextStyle(
+            //   color: Colors.white,
+            //   fontSize: 16,
+            //   fontWeight: FontWeight.bold,
+            // ),
+            bodyMedium: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w600, wordSpacing: 4.0),
+            // const TextStyle(fontWeight: FontWeight.w600, wordSpacing: 4.0),
+            bodySmall: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+            // const TextStyle(fontWeight: FontWeight.w600),
 
             //for search field in appbar
-            titleMedium: const TextStyle(fontWeight: FontWeight.w600),
+            titleMedium: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+            // const TextStyle(fontWeight: FontWeight.w600),
 
             //for bottom nav
-            labelSmall: const TextStyle(fontWeight: FontWeight.w600),
+            labelSmall: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+            // const TextStyle(fontWeight: FontWeight.w600),
           )),
   useMaterial3: false,
   brightness: Brightness.dark,

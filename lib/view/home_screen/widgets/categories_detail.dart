@@ -1,14 +1,16 @@
-import 'package:NUHA/constants/device_constraints.dart';
-import 'package:NUHA/model/video_data_model.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:NUHA/model/category.dart';
-import 'package:NUHA/view/common_widgets/network_image_loader.dart';
-import '../../../model/playlist.dart';
-import '../../video_player_screen/video_player_screen.dart';
-import 'category_header.dart';
 
-import 'videos_list_widget.dart';
+import '../../../model/playlist.dart';
 import '../../common_widgets/appbar.dart';
+import '../../video_player_screen/web_app_player_screen.dart';
+import '/constants/device_constraints.dart';
+import '/model/category.dart';
+import '/model/video_data_model.dart';
+import '/view/common_widgets/network_image_loader.dart';
+import '../../video_player_screen/mobile_app_player_screen.dart';
+import 'category_header.dart';
+import 'videos_list_widget.dart';
 
 class CategoriesDetail extends StatelessWidget {
   final Category category;
@@ -165,45 +167,44 @@ class CategoriesDetail extends StatelessWidget {
                     ),
                   ),
                 );
-              }).toList(),
+              }),
             //default videos will be displayed after the playlists
             if (defaultVideosList != null)
-              ...defaultVideosList!
-                  .map((e) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        VideoPlayerScreen(videoDataModel: e),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: 200,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  child: NetworkImageLoader(
-                                      imageUrl: e.thumbnailUrl),
-                                ),
+              ...defaultVideosList!.map((e) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => kIsWeb
+                                    ? WebAppPlayerScreen(videoDataModel: e)
+                                    : MobileAppPlayerScreen(videoData: e),
                               ),
+                            );
+                          },
+                          child: Container(
+                            height: 200,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.0)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16.0),
+                              child:
+                                  NetworkImageLoader(imageUrl: e.thumbnailUrl),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 16.0),
-                              child: Text(e.videoDescription),
-                            ),
-                          ]))
-                  .toList(),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 16.0),
+                          child: Text(e.videoDescription),
+                        ),
+                      ])),
           ]),
         ),
       ]),

@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'dart:developer';
 
 class VideoDataModel {
   final String videoDescription;
@@ -8,11 +7,13 @@ class VideoDataModel {
   final String videoUrl;
   final String category;
   final String? subCategory;
+  final DateTime createdAt;
   VideoDataModel({
     required this.videoDescription,
     required this.thumbnailUrl,
     required this.videoUrl,
     required this.category,
+    required this.createdAt,
     this.subCategory,
   });
 
@@ -22,6 +23,7 @@ class VideoDataModel {
     String? videoUrl,
     String? category,
     String? subCategory,
+    DateTime? createdAt,
   }) {
     return VideoDataModel(
       videoDescription: videoDescription ?? this.videoDescription,
@@ -29,6 +31,7 @@ class VideoDataModel {
       videoUrl: videoUrl ?? this.videoUrl,
       category: category ?? this.category,
       subCategory: subCategory ?? this.subCategory,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -44,12 +47,14 @@ class VideoDataModel {
 
   factory VideoDataModel.fromMap(Map<String, dynamic> map) {
     return VideoDataModel(
-      videoDescription: map['videoDescription']["stringValue"] as String,
-      thumbnailUrl: map['thumbnailUrl']["stringValue"] as String,
-      videoUrl: map['videoUrl']["stringValue"] as String,
-      category: map['category']["stringValue"] as String,
-      subCategory: map['subCategory']["stringValue"] as String?,
-    );
+        videoDescription: map['videoDescription']["stringValue"] as String,
+        thumbnailUrl: map['thumbnailUrl']["stringValue"] as String,
+        videoUrl: map['videoUrl']["stringValue"] as String,
+        category: map['category']["stringValue"] as String,
+        subCategory: map['subCategory']["stringValue"] as String?,
+        createdAt: DateTime.fromMillisecondsSinceEpoch(
+          int.parse(map['createdAt']["stringValue"]),
+        ));
   }
 
   String toJson() => json.encode(toMap());

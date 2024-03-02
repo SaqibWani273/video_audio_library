@@ -22,6 +22,7 @@ dependencies:
   google_fonts: ^6.1.0
   http: ^1.1.2
   visibility_detector: ^0.4.0+2
+  youtube_player_flutter: ^9.0.0
   youtube_player_iframe: ^4.0.4
   
 

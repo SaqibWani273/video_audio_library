@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../repository/data_repo.dart';
+import '../../model/custom_exception.dart';
 
 part 'data_bloc_event.dart';
 part 'data_bloc_state.dart';
@@ -17,6 +18,7 @@ class DataBlocBloc extends Bloc<DataBlocEvent, DataBlocState> {
     try {
       emit(LoadingState());
       await dataRepo.loadData();
+      log("loaded data, ${dataRepo.videoDataModelList.length}");
       if (dataRepo.categories.isEmpty) {
         await dataRepo.loadCategories();
       }

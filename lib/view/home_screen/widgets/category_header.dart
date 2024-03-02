@@ -1,6 +1,6 @@
-import 'package:NUHA/constants/device_constraints.dart';
+import '/constants/device_constraints.dart';
 import 'package:flutter/material.dart';
-import 'package:NUHA/view/common_widgets/network_image_loader.dart';
+import '/view/common_widgets/network_image_loader.dart';
 
 class CategoryHeader extends StatelessWidget {
   final String playListImgUrl;

@@ -1,16 +1,16 @@
-import 'package:NUHA/constants/device_constraints.dart';
-import 'package:NUHA/view/common_widgets/appbar.dart';
-import 'package:NUHA/view/home_screen/widgets/categories_widget.dart';
+import '/constants/device_constraints.dart';
+import '/view/common_widgets/appbar.dart';
+import '/view/home_screen/widgets/categories_widget.dart';
+import '../../video_player_screen/mobile_app_player_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:NUHA/view/common_widgets/error_screen.dart';
-import 'package:NUHA/view/common_widgets/my_scroll_widget.dart';
+import '/view/common_widgets/error_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../model/video_data_model.dart';
 import '../../../repository/data_repo.dart';
-import '../../../view/video_player_screen/video_player_screen.dart';
+import '../../video_player_screen/web_app_player_screen.dart';
 import '../../../view_model/data_bloc/data_bloc_bloc.dart';
 import '../../common_widgets/network_image_loader.dart';
 
@@ -123,12 +123,14 @@ class _MyBlockBuilderWidgetState extends State<MyBlockBuilder> {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
-    final isDesktop = defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.linux ||
-        defaultTargetPlatform == TargetPlatform.windows;
     return BlocBuilder<DataBlocBloc, DataBlocState>(
       builder: (context, state) {
         if (state is LaodedState || state is LoadingState) {
+          if (state is LaodedState && videosList.isEmpty) {
+            return const Center(
+              child: Text("No Videos Found"),
+            );
+          }
           return GridView.builder(
               // controller: _scrollController,
               //  primary: true,
@@ -152,7 +154,7 @@ class _MyBlockBuilderWidgetState extends State<MyBlockBuilder> {
                     ? const LoadingWidget()
                     : LoadedWidget(
                         videosList: videosList,
-                        isDesktop: isDesktop,
+                        kIsDesktop: kIsDesktop,
                         index: index);
               });
         }
@@ -179,12 +181,12 @@ class LoadedWidget extends StatelessWidget {
   const LoadedWidget({
     super.key,
     required this.videosList,
-    required this.isDesktop,
+    required this.kIsDesktop,
     required this.index,
   });
 
   final List<VideoDataModel> videosList;
-  final bool isDesktop;
+  final bool kIsDesktop;
   final int index;
 
   @override
@@ -196,18 +198,20 @@ class LoadedWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    VideoPlayerScreen(videoDataModel: videosList[index]),
+                builder: (context) => kIsWeb
+                    ? WebAppPlayerScreen(videoDataModel: videosList[index])
+                    : MobileAppPlayerScreen(videoData: videosList[index]),
+                // WebAppPlayerScreen(videoDataModel: videosList[index]),
               ),
             );
           },
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: isDesktop ? BorderRadius.circular(16.0) : null,
+              borderRadius: kIsDesktop ? BorderRadius.circular(16.0) : null,
             ),
             child: ClipRRect(
-              borderRadius: isDesktop
+              borderRadius: kIsDesktop
                   ? BorderRadius.circular(16.0)
                   : BorderRadius.circular(0.0),
               child:

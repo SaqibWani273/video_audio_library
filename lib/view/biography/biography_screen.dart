@@ -1,7 +1,7 @@
-import 'package:NUHA/view/common_widgets/appbar.dart';
+import '/view/common_widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:NUHA/constants/biography_text.dart';
+import '/constants/biography_text.dart';
 
 class BiographyScreen extends StatefulWidget {
   const BiographyScreen({super.key});
@@ -119,7 +119,7 @@ class _BiographyScreenState extends State<BiographyScreen>
                   ]),
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

@@ -106,7 +106,9 @@ class _MyScrollWidgetState extends State<MyScrollWidget> {
               : 0,
           vertical: widget.height != null ? widget.height! * 0.03 : 0,
         ),
-        height: widget.height ?? DeviceConstraints.mainBodyHeight,
+        height: widget.height ??
+            DeviceConstraints.getMainBodyHeight(
+                MediaQuery.of(context).size.height),
         width: double.infinity,
         child: KeyboardListener(
           autofocus: true,

@@ -1,4 +1,4 @@
-import 'package:NUHA/constants/device_constraints.dart';
+import '/constants/device_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

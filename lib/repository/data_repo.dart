@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
-import 'package:NUHA/model/category.dart';
+import '/model/category.dart';
 import '../model/playlist.dart';
 import '/model/video_data_model.dart';
 
 import '../constants/firestore_api_const.dart';
+import '../../model/custom_exception.dart';
 
 class DataRepo {
   List<VideoDataModel> videoDataModelList = [];
@@ -25,13 +26,14 @@ class DataRepo {
       }
       final decodeResponse =
           Map<String, dynamic>.from(jsonDecode(response.body));
-      decodeResponse["documents"].forEach((document) {
+      decodeResponse["documents"]?.forEach((document) {
         videoDataModelList.add(VideoDataModel.fromMap(document["fields"]));
       });
     } on http.ClientException catch (_) {
       throw CustomException(
           type: ExceptionType.network, message: " Network Error !");
     } catch (e) {
+      log(" Error in loadData in datarepo-> $e");
       throw CustomException(
           type: ExceptionType.unknown, message: " Something went wrong !");
     }
@@ -78,7 +80,7 @@ class DataRepo {
         // "recommended",// add it later
         "all",
 
-        ...categories.map((e) => e.nameInEnglish).toList()
+        ...categories.map((e) => e.nameInEnglish)
       ];
     } on http.ClientException catch (_) {
       throw CustomException(
@@ -99,16 +101,4 @@ class DataRepo {
 
     return suggestionTagNames.indexOf(suggestionTagName);
   }
-}
-
-class CustomException implements Exception {
-  final ExceptionType type;
-  final String message;
-
-  CustomException({required this.message, required this.type});
-}
-
-enum ExceptionType {
-  network,
-  unknown,
 }

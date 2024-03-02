@@ -1,91 +1,42 @@
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:NUHA/view/video_player_screen/video_player_screen.dart';
 
+import '../../../constants/device_constraints.dart';
 import '../../home_screen/widgets/videos_list_widget.dart';
+import '../web_app_player_screen.dart';
 import '/model/video_data_model.dart';
 import '/repository/data_repo.dart';
-import '/view/common_widgets/error_screen.dart';
-import '/view_model/suggested_videos_bloc/suggested_videos_bloc.dart';
 
-class Suggestions extends StatefulWidget {
+class Suggestions extends StatelessWidget {
   final VideoDataModel currentVideoDataModel;
   const Suggestions({super.key, required this.currentVideoDataModel});
 
-  @override
-  State<Suggestions> createState() => _SuggestionsState();
-}
-
-class _SuggestionsState extends State<Suggestions> {
-  late DataRepo dataRepo;
-  // final ScrollController scrollController = ScrollController();
-  int currentIndex = 0;
-  @override
-  void initState() {
-    super.initState();
-    context
-        .read<SuggestedVideosBloc>()
-        .add(LoadSuggestedVideosEvent(suggestionTagName: "all"));
-    dataRepo = context.read<DataRepo>();
-  }
-
+  List<VideoDataModel> getsimilarVideos(BuildContext context) => context
+      .read<DataRepo>()
+      .videoDataModelList
+      .where((element) =>
+          element.category == currentVideoDataModel.category &&
+          element.subCategory == currentVideoDataModel.subCategory)
+      .toList()
+    ..sort(
+      (a, b) => a.createdAt.compareTo(b.createdAt),
+    );
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
-    final isDesktop = defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.linux ||
-        defaultTargetPlatform == TargetPlatform.windows;
 
     return Column(children: [
       Expanded(
         //suggestion tagname
-        flex: deviceWidth < 1000 && isDesktop ? 4 : 1,
+        flex: deviceWidth < 1000 && kIsDesktop ? 4 : 1,
         child: SizedBox(
           child: Stack(
             children: [
-              // SingleChildScrollView(
-              //   primary: true,
-              //   scrollDirection: Axis.horizontal,
-              //   child:
-              Center(
+              const Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: Row(
-                    children: dataRepo.suggestionTagNames
-                        .asMap()
-                        .entries
-                        .map((entry) => InkWell(
-                              onTap: () {
-                                setState(() {
-                                  currentIndex = entry.key;
-                                });
-                                context.read<SuggestedVideosBloc>().add(
-                                    LoadSuggestedVideosEvent(
-                                        suggestionTagName: entry.value));
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.all(8.0),
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  color: currentIndex == entry.key
-                                      ? Colors.black
-                                      : Colors.grey.shade200,
-                                ),
-                                child: Text(
-                                  entry.value.toUpperCase(),
-                                  style: TextStyle(
-                                    color: currentIndex == entry.key
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ))
-                        .toList(),
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: Text(
+                    " Similar Videos",
                   ),
                 ),
               ),
@@ -105,38 +56,14 @@ class _SuggestionsState extends State<Suggestions> {
         ),
       ),
       // suggested videos
-      BlocBuilder<SuggestedVideosBloc, SuggestedVideosState>(
-          builder: (context, state) {
-        if (state is LaodedState) {
-          return Expanded(
-            flex: 7,
-            child: isDesktop
-                ? DesktopSuggestions(
-                    suggestedVideos: dataRepo.suggestedVideosList)
-                : MyBlockBuilder(
-                    videosList: dataRepo.suggestedVideosList,
-                  ),
-
-            //  AllVideosWidget(
-            //     videosList: dataRepo.suggestedVideosList,
-            //   ),
-          );
-        }
-        if (state is ErrorState) {
-          return ErrorScreen(
-            errorMessage: state.message,
-            onPressed: () {
-              context.read<SuggestedVideosBloc>().add(LoadSuggestedVideosEvent(
-                  suggestionTagName: widget.currentVideoDataModel.category));
-            },
-          );
-        }
-
-        //loading data or any other state
-
-        return const Expanded(
-            flex: 7, child: Center(child: CircularProgressIndicator()));
-      })
+      Expanded(
+        flex: 7,
+        child: kIsDesktop
+            ? DesktopSuggestions(suggestedVideos: getsimilarVideos(context))
+            : MyBlockBuilder(
+                videosList: getsimilarVideos(context),
+              ),
+      ),
     ]);
   }
 }

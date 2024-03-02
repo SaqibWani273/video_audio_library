@@ -1,10 +1,10 @@
-import 'package:NUHA/model/video_data_model.dart';
-import 'package:NUHA/repository/data_repo.dart';
-import 'package:NUHA/view/common_widgets/appbar.dart';
-import 'package:NUHA/view/common_widgets/error_screen.dart';
-import 'package:NUHA/view/common_widgets/network_image_loader.dart';
-import 'package:NUHA/view/video_player_screen/video_player_screen.dart';
-import 'package:NUHA/view_model/data_bloc/data_bloc_bloc.dart';
+import '../constants/device_constraints.dart';
+import '/model/video_data_model.dart';
+import '/repository/data_repo.dart';
+import '/view/common_widgets/appbar.dart';
+import '/view/common_widgets/network_image_loader.dart';
+import 'video_player_screen/web_app_player_screen.dart';
+import 'video_player_screen/mobile_app_player_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,9 +68,6 @@ class _AudioListWidgetState extends State<AudioScreen> {
       ),
     );
     // final deviceWidth = MediaQuery.of(context).size.width;
-    // final isDesktop = defaultTargetPlatform == TargetPlatform.macOS ||
-    //     defaultTargetPlatform == TargetPlatform.linux ||
-    //     defaultTargetPlatform == TargetPlatform.windows;
     // return BlocBuilder<DataBlocBloc, DataBlocState>(
     //   builder: (context, state) {
     //     if (state is LaodedState || state is LoadingState) {
@@ -96,7 +93,7 @@ class _AudioListWidgetState extends State<AudioScreen> {
     //                 ? const LoadingWidget()
     //                 : LoadedWidget(
     //                     videosList: videosList,
-    //                     isDesktop: isDesktop,
+    //                     kIsDesktop: kIsDesktop,
     //                     index: index);
     //           });
     //     }
@@ -123,12 +120,11 @@ class LoadedWidget extends StatelessWidget {
   const LoadedWidget({
     super.key,
     required this.videosList,
-    required this.isDesktop,
     required this.index,
   });
 
   final List<VideoDataModel> videosList;
-  final bool isDesktop;
+
   final int index;
 
   @override
@@ -140,18 +136,19 @@ class LoadedWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    VideoPlayerScreen(videoDataModel: videosList[index]),
+                builder: (context) => kIsWeb
+                    ? WebAppPlayerScreen(videoDataModel: videosList[index])
+                    : MobileAppPlayerScreen(videoData: videosList[index]),
               ),
             );
           },
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: isDesktop ? BorderRadius.circular(16.0) : null,
+              borderRadius: kIsDesktop ? BorderRadius.circular(16.0) : null,
             ),
             child: ClipRRect(
-              borderRadius: isDesktop
+              borderRadius: kIsDesktop
                   ? BorderRadius.circular(16.0)
                   : BorderRadius.circular(0.0),
               child:

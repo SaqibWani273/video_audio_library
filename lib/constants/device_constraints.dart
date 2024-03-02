@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class DeviceConstraints {
-  static double? deviceHeight;
+  // static double? deviceHeight;
 
   static double appBarHeight = kToolbarHeight + appBarPadding;
   static double topNavBarHeight = 65;
   static double heightMargin = 16;
   static double bottomNavBarHeight = 60;
-  static double mainBodyHeight = deviceHeight! -
-      appBarHeight -
-      topNavBarHeight -
-      heightMargin -
-      bottomNavBarHeight;
+  static getMainBodyHeight(double deviceHeight) {
+    return deviceHeight -
+        appBarHeight -
+        topNavBarHeight -
+        heightMargin -
+        bottomNavBarHeight;
+  }
 
   static Color blackBackground = const Color.fromARGB(200, 0, 0, 0);
   static Color whiteBackground = const Color.fromARGB(200, 245, 245, 245);
@@ -24,3 +27,6 @@ class DeviceConstraints {
 }
 
 const double appBarPadding = 24.0;
+final bool kIsDesktop = defaultTargetPlatform == TargetPlatform.linux ||
+    defaultTargetPlatform == TargetPlatform.windows ||
+    defaultTargetPlatform == TargetPlatform.macOS;

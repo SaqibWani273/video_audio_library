@@ -1,15 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:NUHA/view/biography/biography_screen.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '/constants/device_constraints.dart';
-import '../audio_screen.dart';
-import 'widgets/videos_list_widget.dart';
 
-import '../common_widgets/appbar.dart';
-import 'widgets/categories_widget.dart';
+import '../audio_screen.dart';
+import '/constants/device_constraints.dart';
+import '/view/biography/biography_screen.dart';
+import 'widgets/videos_list_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

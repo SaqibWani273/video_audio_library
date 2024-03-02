@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:NUHA/utils/search_video.dart';
-import 'package:NUHA/view/common_widgets/search_results.dart';
-import 'package:NUHA/view/home_screen/home_page.dart';
+import '/utils/search_video.dart';
+import '/view/common_widgets/search_results.dart';
+import '/view/home_screen/home_page.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../constants/device_constraints.dart';
 

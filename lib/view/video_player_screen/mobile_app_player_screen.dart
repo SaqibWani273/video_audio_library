@@ -212,7 +212,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                       ),
                     )
                   : null,
-              onTap: () => seekVideo(isForward: false),
+              onDoubleTap: () => seekVideo(isForward: false),
             ),
           ),
         ),
@@ -244,7 +244,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                       ),
                     )
                   : null,
-              onTap: () => seekVideo(isForward: true),
+              onDoubleTap: () => seekVideo(isForward: true),
             ),
           ),
         ),

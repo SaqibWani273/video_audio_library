@@ -6,7 +6,12 @@ final class DataBlocInitial extends DataBlocState {}
 
 final class LoadingState extends DataBlocState {}
 
-final class LaodedState extends DataBlocState {}
+final class LaodedState extends DataBlocState {
+  final VideoDataModel? videoDataModel;
+
+  LaodedState({this.videoDataModel});
+
+}
 
 final class ErrorState extends DataBlocState {
   final String message;

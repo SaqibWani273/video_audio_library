@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:NUHA/model/video_data_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../repository/data_repo.dart';
@@ -12,6 +13,8 @@ class DataBlocBloc extends Bloc<DataBlocEvent, DataBlocState> {
   final DataRepo dataRepo;
   DataBlocBloc({required this.dataRepo}) : super(DataBlocInitial()) {
     on<LoadDataFromFirestoreApiEvent>(_loadData);
+    on<ShowVideoEvent>(_showVideo);
+    on<CancelMiniPlayerEvent>(_cancelVideo);
   }
   Future<void> _loadData(
       LoadDataFromFirestoreApiEvent event, Emitter<DataBlocState> emit) async {
@@ -31,5 +34,15 @@ class DataBlocBloc extends Bloc<DataBlocEvent, DataBlocState> {
       log(e.toString());
       emit(ErrorState(message: " Something went wrong !"));
     }
+  }
+ Future< void> _showVideo(ShowVideoEvent event,Emitter<DataBlocState> emit)async{
+    emit(LaodedState());//work around to stop
+  await  Future.delayed(Duration(milliseconds: 100)); //(if) any current video in
+  // miniplayer and open a new video
+emit(LaodedState(videoDataModel: event.videoDataModel));
+
+  }
+  void _cancelVideo(CancelMiniPlayerEvent event,Emitter<DataBlocState> emit){
+    emit(LaodedState());
   }
 }

@@ -1,7 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:miniplayer/miniplayer.dart';
 
+import '../../view_model/data_bloc/data_bloc_bloc.dart';
 import '../audio_screen.dart';
+import '../video_player_screen/mobile_app_player_screen.dart';
+import '../video_player_screen/web_app_player_screen.dart';
 import '/constants/device_constraints.dart';
 import '/view/biography/biography_screen.dart';
 import 'widgets/videos_list_widget.dart';
@@ -22,209 +28,112 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  // final List<Widget> mainBodyWidgets = <Widget>[
-  //   const VideosListWidget(),
-  //   const CategoriesWidget(),
-  //   const Center(
-  //     child: Text("Recommended Videos will appear here soon !"),
-  //   ), //recommended videos
-  // ];
+
 
   @override
   Widget build(BuildContext context) {
+    
     ThemeData mode = Theme.of(context);
-    return DefaultTabController(
-      length: 3,
-      child: SafeArea(
-        child: Scaffold(
-          body: const TabBarView(
-              children: [VideosListWidget(), AudioScreen(), BiographyScreen()]),
-          bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              color: mode.brightness == Brightness.dark
-                  ? DeviceConstraints.darkHeader
-                  : DeviceConstraints.lightHeader,
+    return Stack(
+      children: [
+         DefaultTabController(
+        length: 3,
+        child: SafeArea(
+          child: Scaffold(
+            body: const TabBarView(
+                children: [VideosListWidget(), AudioScreen(), BiographyScreen()]),
+            bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                color: mode.brightness == Brightness.dark
+                    ? DeviceConstraints.darkHeader
+                    : DeviceConstraints.lightHeader,
+              ),
+              height: DeviceConstraints.bottomNavBarHeight,
+              child: TabBar(
+                  tabs: const [
+                    Tab(
+                      icon: Icon(Icons.video_settings),
+                      text: "VIDEO",
+                    ),
+                    Tab(
+                      icon: Icon(Icons.audio_file_outlined),
+                      text: "AUDIO",
+                    ),
+                    Tab(
+                      icon: Icon(Icons.person),
+                      text: "BIOGRAPHY",
+                    )
+                  ],
+                  labelStyle: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w600,
+                      color: mode.brightness == Brightness.dark
+                          ? DeviceConstraints.darkText
+                          : DeviceConstraints.lightText)),
             ),
-            height: DeviceConstraints.bottomNavBarHeight,
-            child: TabBar(
-                tabs: const [
-                  Tab(
-                    icon: Icon(Icons.video_settings),
-                    text: "VIDEO",
-                  ),
-                  Tab(
-                    icon: Icon(Icons.audio_file_outlined),
-                    text: "AUDIO",
-                  ),
-                  Tab(
-                    icon: Icon(Icons.person),
-                    text: "BIOGRAPHY",
-                  )
-                ],
-                labelStyle: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w600,
-                    color: mode.brightness == Brightness.dark
-                        ? DeviceConstraints.darkText
-                        : DeviceConstraints.lightText)),
           ),
         ),
       ),
+      PlayerScreen()
+      ],
+      
     );
   }
 }
 
-// class NavBar {
-//   String title;
-//   IconData icon;
-//   NavBar({required this.title, required this.icon});
-// }
+class PlayerScreen extends StatelessWidget {
+  const PlayerScreen({
+    super.key,
+  });
 
-// final List<NavBar> topNavItems = <NavBar>[
-//   NavBar(title: 'ALL', icon: Icons.video_settings),
-//   NavBar(title: 'Categories', icon: Icons.category),
-//   NavBar(title: 'Recommended', icon: Icons.lightbulb_outlined),
-// ];
-// final List<NavBar> bottomNavItems = <NavBar>[
-//   NavBar(title: 'VIDEOS', icon: Icons.video_settings),
-//   NavBar(title: 'AUDIOS', icon: Icons.audio_file_outlined),
-//   NavBar(title: 'BIOGRAPHY', icon: Icons.person),
-// ];
+  @override
+  Widget build(BuildContext context) {
+    final deviceHeight= MediaQuery.of(context).size.height;
+    // final miniplayerController=context.read<DataRepo>().miniplayerController;
+    return  BlocBuilder<DataBlocBloc, DataBlocState>(
+            builder: (context, state) {
+              if(state is LaodedState && state.videoDataModel!=null){
+                return Miniplayer(
+              minHeight: deviceHeight *0.1,
+              maxHeight: deviceHeight,
+              // controller: miniplayerController,
+              valueNotifier: ValueNotifier(deviceHeight),//to show video in
+              // maxheight by default
+             builder: (height, percentage) {
+               return 
+                   Center(child: Row(
+                         children: [
+                           Expanded(
+                           
+                            child: 
+                     kIsWeb
+                    ? WebAppPlayerScreen(videoDataModel: state.videoDataModel!)
+                    : MobileAppPlayerScreen(videoData:state.videoDataModel!),
+                            ),
+                            if(height== deviceHeight *0.1)
+                            Expanded(child: Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: Text(state.videoDataModel!.videoDescription),
+                                  ),
+                                ),
+                                Expanded(child: IconButton(onPressed: () => context.read<DataBlocBloc>().add(CancelMiniPlayerEvent()), icon: Text("X",style: TextStyle(fontSize: 24),),),)
+                              ],
+                            ))
+                           ],
+                       ));
+               
+               
+              //  PlayerScreen(miniplayerController: miniplayerController,videoDataModel: state.videoDataModel!,playerHeight: height,);
+             }, 
+            );
+              }
+              return Container();//show nothing if there is no active video
+            },
+            
+          );
+    
 
-
-
-
-
-          // currentBottomNavBarIndex == 0
-          //     ? const VideosListWidget()
-          // NestedScrollView(
-          //     floatHeaderSlivers: true,
-          //     headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          //           SliverAppBar(
-          //             backgroundColor: mode.scaffoldBackgroundColor,
-          //             iconTheme: mode.iconTheme,
-          //             pinned: true,
-          //             floating: true,
-          //             title: const AppBarWidget(page: "homePage"),
-          //             bottom: TabBar(
-          //                 labelStyle: TextStyle(
-          //                     color: mode.brightness == Brightness.light
-          //                         ? Colors.black
-          //                         : Colors.white,
-          //                     fontSize: 11,
-          //                     fontWeight: FontWeight.bold),
-          //                 tabs: const [
-          //                   Tab(
-          //                     icon: Icon(Icons.video_settings),
-          //                     text: "ALL",
-          //                   ),
-          //                   Tab(
-          //                     icon: Icon(Icons.category),
-          //                     text: "CATEGORIES",
-          //                   ),
-          //                   Tab(
-          //                     icon: Icon(Icons.lightbulb_outlined),
-          //                     text: "RECOMMENDED",
-          //                   ),
-          //                 ]),
-          //           )
-          //         ],
-          //     body: TabBarView(children: [
-          //       mainBodyWidgets[0],
-          //       mainBodyWidgets[1],
-          //       mainBodyWidgets[2]
-          //     ]))
-          // : currentBottomNavBarIndex == 1
-          //     ? const AudioScreen()
-          // NestedScrollView(
-          //     floatHeaderSlivers: true,
-          //     headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          //           const SliverAppBar(
-          //             title: Text("Audio Screen App Bar"),
-          //           )
-          //         ],
-          //     body: const TabBarView(children: [AudioScreen()]))
-          // : const BiographyScreen(),
-          // NestedScrollView(
-          //     headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          //           const SliverAppBar(
-          //             title: Text("Biography Screen App Bar"),
-          //           )
-          //         ],
-          //     body: const TabBarView(children: [BiographyScreen()])),
-
-
-// BottomNavigationBar(
-//   onTap: (index) {
-//     setState(() {
-//       currentBottomNavBarIndex = index;
-//     });
-//   },
-//   items: const [
-//     BottomNavigationBarItem(
-//         icon: Icon(Icons.video_settings), label: 'VIDEO'),
-//     BottomNavigationBarItem(
-//         icon: Icon(Icons.audio_file_outlined), label: 'AUDIO'),
-//     BottomNavigationBarItem(
-//         icon: Icon(Icons.person), label: 'BIOGRAPHY'),
-//   ],
-//   unselectedLabelStyle: TextStyle(
-//       color: mode.brightness == Brightness.light
-//           ? Colors.black
-//           : Colors.white,
-//       fontSize: 11,
-//       fontWeight: FontWeight.bold),
-//   selectedLabelStyle: TextStyle(
-//       color: mode.brightness == Brightness.light
-//           ? Colors.black
-//           : Colors.white,
-//       fontSize: 13,
-//       fontWeight: FontWeight.bold),
-// )
-
-
-          // BottomNavigationBar(
-          //   onTap: (index) {
-          //     setState(() {
-          //       currentBottomNavBarIndex = index;
-          //     });
-          //   },
-          //   items: const [
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.video_settings), label: 'VIDEO'),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.audio_file_outlined), label: 'AUDIO'),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.person), label: 'BIOGRAPHY'),
-          //   ],
-          // unselectedLabelStyle: TextStyle(
-          //     color: mode.brightness == Brightness.light
-          //         ? Colors.black
-          //         : Colors.white,
-          //     fontSize: 11,
-          //     fontWeight: FontWeight.bold),
-          // selectedLabelStyle: TextStyle(
-          //     color: mode.brightness == Brightness.light
-          //         ? Colors.black
-          //         : Colors.white,
-          //     fontSize: 13,
-          //     fontWeight: FontWeight.bold),
-          // ),
-          // NavigationBar(
-          //   height: DeviceConstraints.bottomNavBarHeight,
-          //   selectedIndex: currentBottomNavBarIndex,
-          //   onDestinationSelected: (int index) {
-          //     log("index = $index");
-          //     if (index == 1) {
-          //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          //         content: Center(child: Text("Coming Soon ...")),
-          //       ));
-          //     }
-          //     setState(() {
-          //       currentBottomNavBarIndex = index;
-          //     });
-          //   },
-          //   destinations: bottomNavItems
-          //       .map((e) =>
-          //           NavigationDestination(icon: Icon(e.icon), label: e.title))
-          //       .toList(),
-          // ),
+  }
+}

@@ -1,8 +1,7 @@
+
 import '/constants/device_constraints.dart';
 import '/view/common_widgets/appbar.dart';
 import '/view/home_screen/widgets/categories_widget.dart';
-import '../../video_player_screen/mobile_app_player_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/view/common_widgets/error_screen.dart';
@@ -10,7 +9,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../model/video_data_model.dart';
 import '../../../repository/data_repo.dart';
-import '../../video_player_screen/web_app_player_screen.dart';
 import '../../../view_model/data_bloc/data_bloc_bloc.dart';
 import '../../common_widgets/network_image_loader.dart';
 
@@ -45,50 +43,53 @@ class _VideosListWidgetState extends State<VideosListWidget> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        body: NestedScrollView(
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (context, index) => [
-            SliverAppBar(
-              forceMaterialTransparency: false,
-              backgroundColor: mode.brightness == Brightness.dark
-                  ? DeviceConstraints.darkHeader
-                  : DeviceConstraints.lightHeader,
-              iconTheme: mode.iconTheme,
-              automaticallyImplyLeading: false,
-              title: const AppBarWidget(page: "VideoScreen"),
-              floating: true,
-              pinned: true,
-              bottom: TabBar(
-                  labelPadding: const EdgeInsets.only(right: 5.0),
-                  tabs: const [
-                    Tab(
-                      icon: Icon(Icons.video_settings),
-                      text: "All",
-                    ),
-                    Tab(
-                      icon: Icon(Icons.category),
-                      text: "Category",
-                    ),
-                    Tab(
-                      icon: Icon(Icons.lightbulb_outlined),
-                      text: "Recommended",
-                    )
-                  ],
-                  labelStyle: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      color: mode.brightness == Brightness.dark
-                          ? DeviceConstraints.darkText
-                          : DeviceConstraints.lightText)),
-            )
-          ],
-          body: const TabBarView(children: [
-            MyBlockBuilder(),
-            CategoriesWidget(),
-            Center(
-              child: Text("Recommended Videos will appear here soon !"),
-            ),
-          ]),
-        ),
+        body: 
+             NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, index) => [
+              SliverAppBar(
+                forceMaterialTransparency: false,
+                backgroundColor: mode.brightness == Brightness.dark
+                    ? DeviceConstraints.darkHeader
+                    : DeviceConstraints.lightHeader,
+                iconTheme: mode.iconTheme,
+                automaticallyImplyLeading: false,
+                title: const AppBarWidget(page: "VideoScreen"),
+                floating: true,
+                pinned: true,
+                bottom: TabBar(
+                    labelPadding: const EdgeInsets.only(right: 5.0),
+                    tabs: const [
+                      Tab(
+                        icon: Icon(Icons.video_settings),
+                        text: "All",
+                      ),
+                      Tab(
+                        icon: Icon(Icons.category),
+                        text: "Category",
+                      ),
+                      Tab(
+                        icon: Icon(Icons.lightbulb_outlined),
+                        text: "Recommended",
+                      )
+                    ],
+                    labelStyle: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
+                        color: mode.brightness == Brightness.dark
+                            ? DeviceConstraints.darkText
+                            : DeviceConstraints.lightText)),
+              )
+            ],
+            body: const TabBarView(children: [
+              MyBlockBuilder(),
+              CategoriesWidget(),
+              Center(
+                child: Text("Recommended Videos will appear here soon !"),
+              ),
+            ]),
+          ),
+         
+         
       ),
     );
     // MyBlockBuilder(
@@ -194,17 +195,8 @@ class LoadedWidget extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(
         child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => kIsWeb
-                    ? WebAppPlayerScreen(videoDataModel: videosList[index])
-                    : MobileAppPlayerScreen(videoData: videosList[index]),
-                // WebAppPlayerScreen(videoDataModel: videosList[index]),
-              ),
-            );
-          },
+          onTap: ()=> context.read<DataBlocBloc>().add(ShowVideoEvent(videoDataModel: videosList[index]),),
+        
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(

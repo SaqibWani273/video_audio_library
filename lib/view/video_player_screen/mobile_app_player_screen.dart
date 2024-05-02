@@ -206,7 +206,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                   ? TextButton.icon(
                       onPressed: null,
                       icon: const Icon(Icons.fast_rewind, color: Colors.white),
-                      label: Text(
+                      label: const Text(
                         "10 secs",
                         style: TextStyle(color: Colors.white),
                       ),
@@ -238,7 +238,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                   ? TextButton.icon(
                       onPressed: null,
                       icon: const Icon(Icons.fast_forward, color: Colors.white),
-                      label: Text(
+                      label: const Text(
                         "10 secs",
                         style: TextStyle(color: Colors.white),
                       ),

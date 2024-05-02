@@ -15,6 +15,8 @@ class DataBlocBloc extends Bloc<DataBlocEvent, DataBlocState> {
     on<LoadDataFromFirestoreApiEvent>(_loadData);
     on<ShowVideoEvent>(_showVideo);
     on<CancelMiniPlayerEvent>(_cancelVideo);
+    on<ShowMiniPlayerEvent>(_showMiniPlayer);
+    on<ShowMaxPlayerEvent>(_showMaxPlayer);
   }
   Future<void> _loadData(
       LoadDataFromFirestoreApiEvent event, Emitter<DataBlocState> emit) async {
@@ -37,12 +39,18 @@ class DataBlocBloc extends Bloc<DataBlocEvent, DataBlocState> {
   }
  Future< void> _showVideo(ShowVideoEvent event,Emitter<DataBlocState> emit)async{
     emit(LaodedState());//work around to stop
-  await  Future.delayed(Duration(milliseconds: 100)); //(if) any current video in
+  await  Future.delayed(const Duration(milliseconds: 100)); //(if) any current video in
   // miniplayer and open a new video
-emit(LaodedState(videoDataModel: event.videoDataModel));
+emit(LaodedState(videoDataModel: event.videoDataModel,isMaxPlayer: true));
 
   }
   void _cancelVideo(CancelMiniPlayerEvent event,Emitter<DataBlocState> emit){
     emit(LaodedState());
+  }
+  void _showMiniPlayer(ShowMiniPlayerEvent event,Emitter<DataBlocState> emit){
+emit(LaodedState(videoDataModel: event.videoDataModel));
+  }
+  void _showMaxPlayer(ShowMaxPlayerEvent event, Emitter<DataBlocState> emit){
+emit(LaodedState(videoDataModel: event.videoDataModel,isMaxPlayer: true));
   }
 }

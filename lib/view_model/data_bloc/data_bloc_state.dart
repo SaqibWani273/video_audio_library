@@ -8,8 +8,9 @@ final class LoadingState extends DataBlocState {}
 
 final class LaodedState extends DataBlocState {
   final VideoDataModel? videoDataModel;
+  final bool? isMaxPlayer;//=> not miniPlayer
 
-  LaodedState({this.videoDataModel});
+  LaodedState({this.videoDataModel,this.isMaxPlayer});
 
 }
 

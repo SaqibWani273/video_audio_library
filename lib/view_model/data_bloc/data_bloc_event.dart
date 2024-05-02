@@ -11,3 +11,11 @@ final class ShowVideoEvent extends DataBlocEvent{
   ShowVideoEvent({required this.videoDataModel});
 }
 final class CancelMiniPlayerEvent extends DataBlocEvent{}
+final class ShowMiniPlayerEvent extends DataBlocEvent{final VideoDataModel videoDataModel;
+
+  ShowMiniPlayerEvent({required this.videoDataModel});}
+final class ShowMaxPlayerEvent extends DataBlocEvent{
+  final VideoDataModel videoDataModel;
+
+  ShowMaxPlayerEvent({required this.videoDataModel});
+}

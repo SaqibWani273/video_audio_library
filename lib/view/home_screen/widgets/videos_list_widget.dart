@@ -11,6 +11,7 @@ import '../../../model/video_data_model.dart';
 import '../../../repository/data_repo.dart';
 import '../../../view_model/data_bloc/data_bloc_bloc.dart';
 import '../../common_widgets/network_image_loader.dart';
+import 'player_screen.dart';
 
 class VideosListWidget extends StatefulWidget {
   //this will be passed from playlist page & not from home page
@@ -44,50 +45,55 @@ class _VideosListWidgetState extends State<VideosListWidget> {
       length: 3,
       child: Scaffold(
         body: 
-             NestedScrollView(
-            floatHeaderSlivers: true,
-            headerSliverBuilder: (context, index) => [
-              SliverAppBar(
-                forceMaterialTransparency: false,
-                backgroundColor: mode.brightness == Brightness.dark
-                    ? DeviceConstraints.darkHeader
-                    : DeviceConstraints.lightHeader,
-                iconTheme: mode.iconTheme,
-                automaticallyImplyLeading: false,
-                title: const AppBarWidget(page: "VideoScreen"),
-                floating: true,
-                pinned: true,
-                bottom: TabBar(
-                    labelPadding: const EdgeInsets.only(right: 5.0),
-                    tabs: const [
-                      Tab(
-                        icon: Icon(Icons.video_settings),
-                        text: "All",
-                      ),
-                      Tab(
-                        icon: Icon(Icons.category),
-                        text: "Category",
-                      ),
-                      Tab(
-                        icon: Icon(Icons.lightbulb_outlined),
-                        text: "Recommended",
-                      )
-                    ],
-                    labelStyle: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w600,
-                        color: mode.brightness == Brightness.dark
-                            ? DeviceConstraints.darkText
-                            : DeviceConstraints.lightText)),
-              )
-            ],
-            body: const TabBarView(children: [
-              MyBlockBuilder(),
-              CategoriesWidget(),
-              Center(
-                child: Text("Recommended Videos will appear here soon !"),
-              ),
-            ]),
-          ),
+             Stack(
+              children: [NestedScrollView(
+                           floatHeaderSlivers: true,
+                           headerSliverBuilder: (context, index) => [
+                SliverAppBar(
+                  forceMaterialTransparency: false,
+                  backgroundColor: mode.brightness == Brightness.dark
+                      ? DeviceConstraints.darkHeader
+                      : DeviceConstraints.lightHeader,
+                  iconTheme: mode.iconTheme,
+                  automaticallyImplyLeading: false,
+                  title: const AppBarWidget(page: "VideoScreen"),
+                  floating: true,
+                  pinned: true,
+                  bottom: TabBar(
+                      labelPadding: const EdgeInsets.only(right: 5.0),
+                      tabs: const [
+                        Tab(
+                          icon: Icon(Icons.video_settings),
+                          text: "All",
+                        ),
+                        Tab(
+                          icon: Icon(Icons.category),
+                          text: "Category",
+                        ),
+                        Tab(
+                          icon: Icon(Icons.lightbulb_outlined),
+                          text: "Recommended",
+                        )
+                      ],
+                      labelStyle: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600,
+                          color: mode.brightness == Brightness.dark
+                              ? DeviceConstraints.darkText
+                              : DeviceConstraints.lightText)),
+                )
+                           ],
+                           body: const TabBarView(children: [
+                MyBlockBuilder(),
+                CategoriesWidget(),
+                Center(
+                  child: Text("Recommended Videos will appear here soon !"),
+                ),
+                           ]),
+                         ),
+                          const PlayerScreen()
+                         ],
+               
+             ),
          
          
       ),
